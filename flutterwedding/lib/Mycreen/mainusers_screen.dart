@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mycreen/myhome_screen.dart';
+import 'package:flutterwedding/Mycreen/search_event_screen.dart';
+import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/opendrawer.dart';
 import 'package:flutterwedding/widget/listevents_widget.dart';
@@ -9,23 +11,32 @@ import 'package:flutterwedding/widget/mycustomer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Mymainusers extends StatefulWidget {
-  const Mymainusers({super.key});
+  final Usermodel usermodel;
+  const Mymainusers({
+    Key? key,
+    required this.usermodel,
+  }) : super(key: key);
 
   @override
   State<Mymainusers> createState() => _MymainusersState();
 }
 
 class _MymainusersState extends State<Mymainusers> {
-  //Usermodel? usermodel;
+  Usermodel? usermodels;
   String? iduser, nameuser, usertype;
   String? idcustomer, usercustomer, customertype;
   SharedPreferences? preferences;
-  Widget currentwidget = const Myevents();
+  Widget? currentwidget;
+  late double widths, heights;
+  bool showseach = true;
+
   List<Widget> listwidget = [
     Mystyle().showtitle1("MY EVENTS", Colors.white),
     Mystyle().showtitle1("MY CUSTOMER", Colors.white),
-    Mystyle().showtitle1(" EVENTEXPRID", Colors.white)
+    Mystyle().showtitle1(" EVENTEXPRID", Colors.white),
+    textfieldsearch(),
   ];
+
   int index = 0;
   @override
   void initState() {
@@ -33,7 +44,8 @@ class _MymainusersState extends State<Mymainusers> {
     setState(() {
       finduser();
     });
-    //usermodel = widget.usermodel;
+    usermodels = widget.usermodel;
+    currentwidget = Myevents(usermodel: usermodels!);
   }
 
   Future<void> finduser() async {
@@ -48,12 +60,32 @@ class _MymainusersState extends State<Mymainusers> {
 
   @override
   Widget build(BuildContext context) {
+    widths = MediaQuery.sizeOf(context).width;
+    heights = MediaQuery.sizeOf(context).height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(Myconstant().appbar),
+        backgroundColor: Colors.blue.shade600,
         leading: opendrawer(),
+        actions: [
+          showseach
+              ? Container(
+                  margin: const EdgeInsets.only(right: 20.0),
+                  child: IconButton(
+                    onPressed: () {
+                      MaterialPageRoute route = MaterialPageRoute(
+                        builder: (context) =>
+                            Searchevent(usermodel: usermodels!),
+                      );
+                      Navigator.push(context, route);
+                    },
+                    icon: const Icon(Icons.search),
+                    color: Colors.white,
+                    iconSize: 35.0,
+                  ))
+              : const Text("")
+        ],
         title: Container(
-          margin: const EdgeInsets.only(left: 30.0),
+          margin: const EdgeInsets.only(left: 15.0),
           child: Row(
             children: [
               listwidget[index],
@@ -99,8 +131,9 @@ class _MymainusersState extends State<Mymainusers> {
       hoverColor: Colors.red,
       onTap: () {
         setState(() {
+          showseach = true;
           index = 0;
-          currentwidget = const Myevents();
+          currentwidget = Myevents(usermodel: usermodels!);
         });
         Navigator.pop(context);
       },
@@ -120,11 +153,11 @@ class _MymainusersState extends State<Mymainusers> {
               color: Colors.white,
             ),
           )),
-      title:
-          Mystyle().showtitle2(" CUSTOMER", Color(Myconstant().iconcolor)),
+      title: Mystyle().showtitle2(" CUSTOMER", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
         setState(() {
+          showseach = false;
           index = 1;
           nameuser != null
               ? currentwidget = Mycustomer(
@@ -159,6 +192,7 @@ class _MymainusersState extends State<Mymainusers> {
           Mystyle().showtitle2(" EVENTEXPRID", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
+        showseach = false;
         setState(() {
           index = 2;
           currentwidget = const Myguestes();
@@ -252,4 +286,53 @@ class _MymainusersState extends State<Mymainusers> {
       ),
     );
   }
+}
+
+Container textfieldsearch() {
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(30.0),
+      color: Colors.white,
+    ),
+    height: 50.0,
+    width: 250.0,
+    child: TextField(
+      decoration: InputDecoration(
+        hintText: 'Searchevents',
+        hintStyle: TextStyle(
+          height: -0.5,
+          color: Colors.blue.shade500,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+        prefixIcon: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.search),
+          color: Color(Myconstant().appbar),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(
+            style: BorderStyle.none,
+            color: Color(Myconstant().reds),
+            width: 1.0,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: BorderSide(
+            style: BorderStyle.none,
+            color: Color(Myconstant().reds),
+            width: 1.0,
+          ),
+        ),
+      ),
+      style: TextStyle(
+        color: Color(Myconstant().reds),
+        fontSize: 18.0,
+        fontWeight: FontWeight.bold,
+        height: 1.0,
+      ),
+    ),
+  );
 }

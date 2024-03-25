@@ -1,19 +1,23 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
-import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mymodel/eventmodel.dart';
+import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Addcustomer extends StatefulWidget {
-  final String? iduser;
-  final String? nameuser;
+  final Usermodel usermodel;
+  final String idevent;
   const Addcustomer({
     Key? key,
-    this.iduser,
-    this.nameuser,
+    required this.usermodel,
+    this.idevent = '',
   }) : super(key: key);
 
   @override
@@ -21,30 +25,29 @@ class Addcustomer extends StatefulWidget {
 }
 
 class _AddcustomerState extends State<Addcustomer> {
+  Usermodel? usermodel;
   late double widths, heights;
   bool eyes = true;
   String? iduser,
+      idevent,
       nameuser,
       namecustomer,
       usercustomer,
       password,
       phone,
       address;
+  File? file;
+  String? urlpicture;
 
   @override
   void initState() {
     super.initState();
     //finduser();
-    iduser = widget.iduser;
-    nameuser = widget.nameuser;
+    usermodel = widget.usermodel;
+    iduser = usermodel!.iduser;
+    nameuser = usermodel!.nameuser;
+    idevent = widget.idevent;
   }
-
-  // Future<void> finduser() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     username = preferences.getString('username');
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +105,7 @@ class _AddcustomerState extends State<Addcustomer> {
         ),
       ),
       onPressed: () {
+        print("iduser==>$iduser====idevent===>$idevent");
         if (namecustomer == null ||
             namecustomer == "" ||
             usercustomer == null ||
@@ -114,8 +118,7 @@ class _AddcustomerState extends State<Addcustomer> {
             address == "") {
           mydialog(context, 'pleasinputdata...!');
         } else {
-          checkusercustomer();
-          //insertuser();
+          uploadphototoserver();
         }
       },
       child: Mystyle().showtitle1("Create", Colors.white),
@@ -131,7 +134,7 @@ class _AddcustomerState extends State<Addcustomer> {
       Response response1 = await Dio().get(url1);
       Response response2 = await Dio().get(url2);
       if (response1.toString() == 'null' && response2.toString() == 'null') {
-        insertcustomer();
+        uploadphototoserver();
       } else {
         // ignore: use_build_context_synchronously
         mydialog(context, 'plaese chang username...!');
@@ -144,22 +147,56 @@ class _AddcustomerState extends State<Addcustomer> {
 
   Future<void> insertcustomer() async {
     String url =
-        "${Myconstant().domain}/projectsabaykot/insertcustomer.php?isAdd=true&iduser=$iduser&nameuser=$nameuser&namecustomer=$namecustomer&usercustomer=$usercustomer&password=$password&phone=$phone&address=$address&status=customer";
+        "${Myconstant().domain}/projectsabaykot/insertcustomer.php?isAdd=true&iduser=$iduser&idevent=$idevent&picture=$urlpicture&namecustomer=$namecustomer&usercustomer=$usercustomer&password=$password&phone=$phone&address=$address&status=customer";
 
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data); //chang unicode8
       if (result.toString() == 'true') {
+        Mystyle().showalertmessage();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
       } else {
         // ignore: use_build_context_synchronously
         mydialog(context, 'insert user fail');
       }
-    } catch (e) {
-      // ignore: use_build_context_synchronously
-      mydialog(context, "error==>$e");
-    }
+    } catch (e) {}
+  }
+
+  Future<void> chooseimagecutomer(ImageSource imageSource) async {
+    var object = await ImagePicker().pickImage(
+      source: imageSource,
+      maxHeight: 800.0,
+      maxWidth: 700.0,
+    );
+
+    setState(() {
+      file = File(object!.path);
+    });
+  }
+
+  Future<void> uploadphototoserver() async {
+    Random random = Random();
+    int i = random.nextInt(10000000);
+    String nameimage = "customer$i.jpg";
+    String urlimage =
+        "${Myconstant().domain}/projectsabaykot/uploadPhotocustomerToserver.php";
+    try {
+      if (file == null) {
+        urlpicture = "/projectsabaykot/PhotoCustomer/logo.jpg";
+        insertcustomer();
+      } else {
+        Map<String, dynamic> map = {};
+        map["file"] =
+            await MultipartFile.fromFile(file!.path, filename: nameimage);
+        FormData formData = FormData.fromMap(map);
+
+        Dio().post(urlimage, data: formData).then((value) {
+          urlpicture = "/projectsabaykot/PhotoCustomer/$nameimage";
+          insertcustomer();
+        });
+      }
+    } catch (e) {}
   }
 
   Widget buildpicture() {
@@ -171,7 +208,7 @@ class _AddcustomerState extends State<Addcustomer> {
           SizedBox(
             width: widths * 0.15,
             child: IconButton(
-              onPressed: () {},
+              onPressed: () =>chooseimagecutomer(ImageSource.camera),
               icon: Image.asset("images/image3.png"),
             ),
           ),
@@ -181,15 +218,17 @@ class _AddcustomerState extends State<Addcustomer> {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(width: 3.0, color: Color(Myconstant().appbar)),
-              image: const DecorationImage(
+              image: file==null? const DecorationImage(
                 image: AssetImage("images/logo.jpg"),
+              ): DecorationImage(
+                image:FileImage(file!),
               ),
             ),
           ),
           SizedBox(
             width: widths * 0.15,
             child: IconButton(
-              onPressed: () {},
+              onPressed: ()=>chooseimagecutomer(ImageSource.gallery),
               icon: Image.asset("images/image2.png"),
             ),
           ),

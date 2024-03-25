@@ -2,7 +2,7 @@
 class Customermodel {
   String? idcustomer;
   String? iduser;
-  String? nameuser;
+  String? idevent;
   String? picture;
   String? namecustomer;
   String? usercustomer;
@@ -14,7 +14,7 @@ class Customermodel {
   Customermodel(
       {this.idcustomer,
       this.iduser,
-      this.nameuser,
+      this.idevent,
       this.picture,
       this.namecustomer,
       this.usercustomer,
@@ -26,7 +26,7 @@ class Customermodel {
   Customermodel.fromJson(Map<String, dynamic> json) {
     idcustomer = json['idcustomer'];
     iduser = json['iduser'];
-    nameuser = json['nameuser'];
+    idevent = json['idevent'];
     picture = json['picture'];
     namecustomer = json['namecustomer'];
     usercustomer = json['usercustomer'];
@@ -40,7 +40,7 @@ class Customermodel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['idcustomer'] = idcustomer;
     data['iduser'] = iduser;
-    data['nameuser'] = nameuser;
+    data['idevent'] = idevent;
     data['picture'] = picture;
     data['namecustomer'] = namecustomer;
     data['usercustomer'] = usercustomer;
@@ -51,3 +51,4 @@ class Customermodel {
     return data;
   }
 }
+

@@ -1,5 +1,5 @@
 
-class Eventmodel {
+class Eventsmodel {
   String? idevent;
   String? iduser;
   String? nameuser;
@@ -7,10 +7,11 @@ class Eventmodel {
   String? picture;
   String? eventdetail;
   String? eventdate;
+  String? eventtime;
   String? expridate;
   String? status;
 
-  Eventmodel(
+  Eventsmodel(
       {this.idevent,
       this.iduser,
       this.nameuser,
@@ -18,10 +19,11 @@ class Eventmodel {
       this.picture,
       this.eventdetail,
       this.eventdate,
+      this.eventtime,
       this.expridate,
       this.status});
 
-  Eventmodel.fromJson(Map<String, dynamic> json) {
+  Eventsmodel.fromJson(Map<String, dynamic> json) {
     idevent = json['idevent'];
     iduser = json['iduser'];
     nameuser = json['nameuser'];
@@ -29,6 +31,7 @@ class Eventmodel {
     picture = json['picture'];
     eventdetail = json['eventdetail'];
     eventdate = json['eventdate'];
+    eventtime = json['eventtime'];
     expridate = json['expridate'];
     status = json['status'];
   }
@@ -42,6 +45,7 @@ class Eventmodel {
     data['picture'] = picture;
     data['eventdetail'] = eventdetail;
     data['eventdate'] = eventdate;
+    data['eventtime'] = eventtime;
     data['expridate'] = expridate;
     data['status'] = status;
     return data;

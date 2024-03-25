@@ -3,31 +3,29 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
-import 'package:flutterwedding/Mycreen/addcustomer_screen.dart';
-import 'package:flutterwedding/Mycreen/addevents_screen.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 
-class Myevents extends StatefulWidget {
+class Searchevent extends StatefulWidget {
   final Usermodel usermodel;
-
-  const Myevents({
+  const Searchevent({
     Key? key,
     required this.usermodel,
   }) : super(key: key);
 
   @override
-  State<Myevents> createState() => _MyeventsState();
+  State<Searchevent> createState() => _SearcheventState();
 }
 
-class _MyeventsState extends State<Myevents> {
+class _SearcheventState extends State<Searchevent> {
   late double widths, heights;
   Usermodel? usermodel;
-  Eventsmodel? eventmodel;
   bool status = true;
   bool loadstatus = true;
   List<Eventsmodel> listeventmodel = [];
+  // ignore: non_constant_identifier_names
+  List<Eventsmodel> display_list = [];
 
   @override
   void initState() {
@@ -49,9 +47,10 @@ class _MyeventsState extends State<Myevents> {
       var result = json.decode(value.data);
       if (result.toString() != 'null') {
         for (var map in result) {
-         eventmodel = Eventsmodel.fromJson(map);
+          Eventsmodel eventmodel = Eventsmodel.fromJson(map);
           setState(() {
-            listeventmodel.add(eventmodel!);
+            listeventmodel.add(eventmodel);
+            display_list = List.from(listeventmodel);
           });
         }
       } else {
@@ -62,24 +61,70 @@ class _MyeventsState extends State<Myevents> {
     });
   }
 
+  void updatelist(String value) {
+    setState(() {
+      //getallevents();
+      display_list = listeventmodel
+          .where((element) =>
+              element.eventdate!.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     widths = MediaQuery.sizeOf(context).width;
     heights = MediaQuery.sizeOf(context).height;
     return Scaffold(
-      body: Stack(
-        children: [
-          loadstatus
-              ? Mystyle().showprogress()
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      showcontent(),
-                    ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(
+          FocusNode(),
+        ),
+        child: Stack(
+          children: [
+            loadstatus
+                ? Mystyle().showprogress()
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 70.0,
+                        ),
+                        showcontent(),
+                      ],
+                    ),
+                  ),
+            Container(
+              height: 90.0,
+              width: double.infinity,
+              color: Colors.blue,
+            ),
+            Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 25.0),
+                  child: IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(
+                      Icons.chevron_left,
+                      color: Colors.white,
+                      size: 45.0,
+                    ),
                   ),
                 ),
-          buttomaddevents(),
-        ],
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 25.0),
+                      child: textfieldsearch(),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -94,7 +139,7 @@ class _MyeventsState extends State<Myevents> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const ScrollPhysics(),
-      itemCount: listeventmodel.length,
+      itemCount: display_list.length,
       itemBuilder: (context, index) => mycontents(index),
     );
   }
@@ -106,26 +151,29 @@ class _MyeventsState extends State<Myevents> {
         children: [
           Row(
             children: [
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Container(
-                  margin: const EdgeInsets.all(8.0),
-                  width: widths * 0.35,
-                  height: widths * 0.4,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          "${Myconstant().domain}${listeventmodel[index].picture}"),
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Colors.white70,
-                      width: 5.01,
-                      strokeAlign: 0.3,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.all(8.0),
+                    width: widths * 0.35,
+                    height: widths * 0.4,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(
+                            "${Myconstant().domain}${display_list[index].picture}"),
+                      ),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.white70,
+                        width: 5.01,
+                        strokeAlign: 0.3,
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ],
+              ),
               SizedBox(
                 width: widths * 0.54,
                 height: widths * 0.34,
@@ -135,13 +183,13 @@ class _MyeventsState extends State<Myevents> {
                       Mystyle()
                           .showtitle4("កម្មវិធី:", Color(Myconstant().appbar)),
                       Mystyle().showtitle4(
-                          "${listeventmodel[index].eventname}", Colors.red),
+                          "${display_list[index].eventname}", Colors.red),
                       Row(
                         children: [
                           Mystyle().showtitle4(
                               "ថ្ងៃទី:", Color(Myconstant().appbar)),
                           Mystyle().showtitle4(
-                              "${listeventmodel[index].eventdate}", Colors.red),
+                              "${display_list[index].eventdate}", Colors.red),
                         ],
                       ),
                       Row(
@@ -149,11 +197,11 @@ class _MyeventsState extends State<Myevents> {
                           Mystyle()
                               .showtitle4("​ម៉ោង:", Color(Myconstant().appbar)),
                           Mystyle().showtitle4(
-                              "${listeventmodel[index].eventtime}", Colors.red),
+                              "${display_list[index].eventtime}", Colors.red),
                         ],
                       ),
                       Mystyle().showtitle4(
-                          "detail: ${listeventmodel[index].eventdetail}",
+                          "detail: ${display_list[index].eventdetail}",
                           Colors.blue),
                     ],
                   ),
@@ -172,15 +220,7 @@ class _MyeventsState extends State<Myevents> {
                         color: Colors.white,
                       ),
                       child: IconButton(
-                        onPressed: () {
-                          print(
-                              "==============>id==${listeventmodel[index].idevent}");
-                          MaterialPageRoute route = MaterialPageRoute(
-                            builder: (context) =>
-                                Addcustomer(usermodel: usermodel!,idevent:listeventmodel[index].idevent!),
-                          );
-                          Navigator.push(context, route);
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.group_add,
                         ),
@@ -229,38 +269,54 @@ class _MyeventsState extends State<Myevents> {
     );
   }
 
-  Container buttomaddevents() {
+  Widget textfieldsearch() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10.0, right: 25.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              FloatingActionButton(
-                onPressed: () {
-                  MaterialPageRoute route = MaterialPageRoute(
-                    builder: (context) => Addevents(usermodel: usermodel!),
-                  );
-                  Navigator.push(context, route).then(
-                    (value) {
-                      listeventmodel.clear();
-                      getallevents();
-                    },
-                  );
-                },
-                backgroundColor: Colors.blue.shade700,
-                shape:
-                    CircleBorder(side: BorderSide(color: Colors.blue.shade700)),
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.white,
+      ),
+      height: 50.0,
+      width: 300.0,
+      child: TextField(
+        keyboardType: TextInputType.datetime,
+        onChanged: (value) => updatelist(value),
+        decoration: InputDecoration(
+          hintText: 'Searcheventdate',
+          hintStyle: TextStyle(
+            height: -0.5,
+            color: Colors.blue.shade500,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+          prefixIcon: const Icon(
+            Icons.search,
+            size: 30.0,
+            weight: 10.0,
+            color: Colors.blue,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            borderSide: BorderSide(
+              style: BorderStyle.none,
+              color: Color(Myconstant().reds),
+              width: 1.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            borderSide: BorderSide(
+              style: BorderStyle.none,
+              color: Color(Myconstant().reds),
+              width: 1.0,
+            ),
+          ),
+        ),
+        style: TextStyle(
+          color: Color(Myconstant().reds),
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+          height: 1.0,
+        ),
       ),
     );
   }

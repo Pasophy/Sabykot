@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mycreen/mainusers_screen.dart';
+import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/drawer_homescreen.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
@@ -16,6 +20,8 @@ class Myhomecreen extends StatefulWidget {
 }
 
 class _MyhomecreenState extends State<Myhomecreen> {
+  Usermodel? usermodel;
+  String? username;
   @override
   void initState() {
     super.initState();
@@ -25,18 +31,37 @@ class _MyhomecreenState extends State<Myhomecreen> {
   Future<void> checkuserloging() async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      
-      String? username = preferences.getString('username');
-      String? usercustomer = preferences.getString('usercustomer');
-      if (username != null && username.isNotEmpty) {
-        routrtoservice(const Mymainusers());
-      }else if(usercustomer !=null && usercustomer.isNotEmpty){
-        routrtoservice(const Mymainusers());
-      }
+      setState(() {
+        username = preferences.getString('username');
+        if (username != null) {
+          getuserwhereulogin();
+        }
+      });
     } catch (e) {
       // ignore: use_build_context_synchronously
       mydialog(context, 'Error');
     }
+  }
+
+  Future<void> getuserwhereulogin() async {
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$username";
+
+    try {
+      await Dio().get(url).then((value) {
+        var result = json.decode(value.data);
+        if (result.toString() != 'null') {
+          for (var map in result) {
+           setState(() {
+              usermodel = Usermodel.fromJson(map);
+           });
+          }
+          routrtoservice(Mymainusers(usermodel: usermodel!));
+        } else {
+          mydialog(context, 'មិនទាន់មានអ្នកប្រើ ...!');
+        }
+      });
+    } catch (e) {}
   }
 
   void routrtoservice(Widget widget) {
@@ -51,7 +76,7 @@ class _MyhomecreenState extends State<Myhomecreen> {
     return Scaffold(
       appBar: AppBar(
           leading: opendrawer(),
-          backgroundColor: Color(Myconstant().appbar),
+          backgroundColor: Colors.blue.shade600,
           title: Mystyle().showtitle1(
             "WELCOME SABAY KOT",
             Color(Myconstant().titlecolor),
@@ -103,6 +128,7 @@ class _MyhomecreenState extends State<Myhomecreen> {
       onPageChanged: (value) {
         print('Page changed: $value');
       },
+
       /// Auto scroll interval.
       /// Do not auto scroll with null or 0.
       //autoPlayInterval: 3000,

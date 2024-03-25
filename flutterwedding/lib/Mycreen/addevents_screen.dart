@@ -1,30 +1,53 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+
 import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Addevents extends StatefulWidget {
-  const Addevents({super.key});
+  final Usermodel usermodel;
+  const Addevents({
+    Key? key,
+    required this.usermodel,
+  }) : super(key: key);
 
   @override
   State<Addevents> createState() => _AddeventsState();
 }
 
 class _AddeventsState extends State<Addevents> {
+  Usermodel? usermodel;
   late double widths, hieghts;
-  TextEditingController datecontroller = TextEditingController();
-  TextEditingController timecontroller = TextEditingController();
+  File? file;
+  String? urlpicture;
+  final TextEditingController eventdatecontroller = TextEditingController();
+  final TextEditingController expridatecontrollor = TextEditingController();
+  final TextEditingController eventtimecontroller = TextEditingController();
+  String? iduser, nameuser, eventname, eventdetail;
 
-  String? eventdate;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    usermodel = widget.usermodel;
+    iduser = usermodel!.iduser;
+    nameuser = usermodel!.nameuser;
+  }
+
   @override
   Widget build(BuildContext context) {
     widths = MediaQuery.sizeOf(context).width;
     hieghts = MediaQuery.sizeOf(context).height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(Myconstant().appbar),
+        backgroundColor: Colors.blue.shade600,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
@@ -63,6 +86,58 @@ class _AddeventsState extends State<Addevents> {
     );
   }
 
+  Future<void> insertevents() async {
+    String url =
+        "${Myconstant().domain}/projectsabaykot/insertEvents.php?isAdd=true&iduser=$iduser&nameuser=$nameuser&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&expridate=${expridatecontrollor.text}&status=disable";
+    try {
+      await Dio().get(url).then((value) {
+        var result = json.decode(value.data); //chang unicode8
+        if (result.toString() == 'true') {
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          Mystyle().showalertmessage();
+        } else {
+          // ignore: use_build_context_synchronously
+          mydialog(context, 'insert fail');
+        }
+      });
+    } catch (e) {}
+  }
+
+  Future<void> chooseimageevents(ImageSource imageSource) async {
+    var object = await ImagePicker().pickImage(
+      source: imageSource,
+      maxHeight: 800.0,
+      maxWidth: 700.0,
+    );
+
+    setState(() {
+      file = File(object!.path);
+    });
+  }
+
+  Future<void> uploadeventstoserver() async {
+    Random random = Random();
+    int i = random.nextInt(10000000);
+    String nameimage = "event$i.jpg";
+    String urlimage =
+        "${Myconstant().domain}/projectsabaykot/uploadPhotoeventsToserver.php";
+    try {
+      if (file == null) {
+        urlpicture = "/projectsabaykot/PhotoEvents/logo.jpg";
+        insertevents();
+      } else {
+        Map<String, dynamic> map = {};
+        map["file"] = await MultipartFile.fromFile(file!.path,filename: nameimage);
+        FormData formData = FormData.fromMap(map);
+        Dio().post(urlimage, data: formData).then((value) {
+          urlpicture = "/projectsabaykot/PhotoEvents/$nameimage";
+          insertevents();
+        });
+      }
+    } catch (e) {}
+  }
+
   Row buildpicture() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +145,7 @@ class _AddeventsState extends State<Addevents> {
         SizedBox(
           width: widths * 0.15,
           child: IconButton(
-            onPressed: () {},
+            onPressed: () => chooseimageevents(ImageSource.camera),
             icon: Image.asset("images/image3.png"),
           ),
         ),
@@ -80,15 +155,19 @@ class _AddeventsState extends State<Addevents> {
           decoration: BoxDecoration(
             border: Border.all(width: 3.0, color: Color(Myconstant().appbar)),
             shape: BoxShape.circle,
-            image: const DecorationImage(
-              image: AssetImage("images/logo.jpg"),
-            ),
+            image: file == null
+                ? const DecorationImage(
+                    image: AssetImage("images/logo.jpg"),
+                  )
+                : DecorationImage(
+                    image: FileImage(file!),
+                  ),
           ),
         ),
         SizedBox(
           width: widths * 0.15,
           child: IconButton(
-            onPressed: () {},
+            onPressed: () => chooseimageevents(ImageSource.gallery),
             icon: Image.asset("images/image2.png"),
           ),
         ),
@@ -106,7 +185,7 @@ class _AddeventsState extends State<Addevents> {
       height: 50.0,
       width: widths * 0.67,
       child: TextField(
-        //onChanged: (value) => namecustomer = value.toString(),
+        onChanged: (value) => eventname = value.toString(),
         decoration: InputDecoration(
           labelText: 'Eventname:',
           labelStyle: TextStyle(
@@ -155,7 +234,7 @@ class _AddeventsState extends State<Addevents> {
       width: widths * 0.67,
       child: TextField(
         maxLines: 5,
-        //onChanged: (value) => namecustomer = value.toString(),
+        onChanged: (value) => eventdetail = value.toString(),
         decoration: InputDecoration(
           labelText: 'Eventdetail:',
           labelStyle: TextStyle(
@@ -203,8 +282,9 @@ class _AddeventsState extends State<Addevents> {
       height: 50.0,
       width: widths * 0.67,
       child: TextField(
-        controller: datecontroller,
-        onChanged: (value) => eventdate = value.toString(),
+        readOnly: true,
+        controller: eventdatecontroller,
+        //onChanged: (value) => eventdate = value.toString(),
         decoration: InputDecoration(
           labelText: 'Eventdate:',
           labelStyle: TextStyle(
@@ -228,8 +308,7 @@ class _AddeventsState extends State<Addevents> {
                   final formatdate =
                       formatDate(dateTime, [dd, '-', mm, '-', yyyy]);
                   setState(() {
-                    datecontroller.text = formatdate.toString();
-                    eventdate = datecontroller.toString();
+                    eventdatecontroller.text = formatdate.toString();
                   });
                 }
               },
@@ -269,8 +348,8 @@ class _AddeventsState extends State<Addevents> {
       height: 50.0,
       width: widths * 0.67,
       child: TextField(
-        controller: datecontroller,
-        onChanged: (value) => eventdate = value.toString(),
+        readOnly: true,
+        controller: expridatecontrollor,
         decoration: InputDecoration(
           labelText: 'Expridate:',
           labelStyle: TextStyle(
@@ -294,8 +373,7 @@ class _AddeventsState extends State<Addevents> {
                   final formatdate =
                       formatDate(dateTime, [dd, '-', mm, '-', yyyy]);
                   setState(() {
-                    datecontroller.text = formatdate.toString();
-                    eventdate = datecontroller.toString();
+                    expridatecontrollor.text = formatdate.toString();
                   });
                 }
               },
@@ -335,8 +413,8 @@ class _AddeventsState extends State<Addevents> {
       height: 50.0,
       width: widths * 0.67,
       child: TextField(
-        controller: timecontroller,
-        onChanged: (value) => eventdate,
+        readOnly: true,
+        controller: eventtimecontroller,
         decoration: InputDecoration(
           labelText: 'Eventtime:',
           labelStyle: TextStyle(
@@ -352,9 +430,14 @@ class _AddeventsState extends State<Addevents> {
                   context: context,
                   initialTime: TimeOfDay.now(),
                 );
-                setState(() {
-                  timecontroller.text = timeOfDay!.format(context);
-                });
+                if (timeOfDay == null) {
+                  // ignore: use_build_context_synchronously
+                  mydialog(context, "សូមជ្រើសរើសម៉ោង...!");
+                } else {
+                  setState(() {
+                    eventtimecontroller.text = timeOfDay.format(context);
+                  });
+                }
               },
               icon: const Icon(Icons.timer)),
           enabledBorder: OutlineInputBorder(
@@ -386,14 +469,24 @@ class _AddeventsState extends State<Addevents> {
     return FilledButton(
       style: ButtonStyle(
         backgroundColor:
-            MaterialStatePropertyAll(Color(Myconstant().buttomcolor)),
+            MaterialStatePropertyAll(Colors.blue.shade700),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
       ),
       onPressed: () {
-        print("date=========>${datecontroller.value}");
-        print("eate=========>$eventdate");
+        if (eventname == "" ||
+            eventname == null ||
+            eventdetail == "" ||
+            eventdetail == null ||
+            eventdatecontroller.text.isEmpty ||
+            eventtimecontroller.text.isEmpty ||
+            expridatecontrollor.text.isEmpty) {
+          mydialog(context, "Insert fail");
+        } else {
+          uploadeventstoserver();
+          print("$eventname,$eventdetail,${eventdatecontroller.value}");
+        }
       },
       child: Mystyle().showtitle1("Create", Colors.white),
     );

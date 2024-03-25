@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mycreen/maincustomer.dart';
 import 'package:flutterwedding/Mycreen/mainusers_screen.dart';
 import 'package:flutterwedding/Mymodel/customermodel.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
@@ -109,7 +110,6 @@ class _MysigninState extends State<Mysignin> {
     try {
       Response response = await Dio().get(url);
       var result = json.decode(response.data);
-
       if (response.toString() == 'null') {
         String url =
             "${Myconstant().domain}/projectsabaykot/getcustomerWhereUsercustomer.php?isAdd=true&usercustomer=$username";
@@ -124,7 +124,7 @@ class _MysigninState extends State<Mysignin> {
               customermodel = Customermodel.fromJson(map);
               if (password == customermodel!.password &&
                   username == customermodel!.usercustomer) {
-                routetoservices(const Mymainusers(), customermodel!);
+                routetoservices(const Maincustomer(), customermodel!);
               } else {
                 // ignore: use_build_context_synchronously
                 mydialog(context, 'please check password uername...!');
@@ -140,7 +140,7 @@ class _MysigninState extends State<Mysignin> {
           usermodel = Usermodel.fromJson(map);
           if (password == usermodel!.password &&
               username == usermodel!.username) {
-            routetoservice(const Mymainusers(), usermodel!);
+            routetoservice(Mymainusers(usermodel: usermodel!), usermodel!);
           } else {
             // ignore: use_build_context_synchronously
             mydialog(context, 'check password uername...!');

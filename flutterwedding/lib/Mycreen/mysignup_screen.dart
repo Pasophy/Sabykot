@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Mysignup extends StatefulWidget {
   const Mysignup({super.key});
@@ -15,7 +19,9 @@ class Mysignup extends StatefulWidget {
 class _MysignupState extends State<Mysignup> {
   late double widths, heights;
   bool eyes = true;
-  String? nameuser, username, password, phone, address;
+  String? nameuser, username, password, phone, address, urlpicture;
+
+  File? file;
   @override
   Widget build(BuildContext context) {
     widths = MediaQuery.sizeOf(context).width;
@@ -102,7 +108,7 @@ class _MysignupState extends State<Mysignup> {
             address == "") {
           mydialog(context, 'pleasinputdata...!');
         } else {
-          checkuseradmin();
+        checkuseradmin();
           //insertuser();
         }
       },
@@ -119,7 +125,7 @@ class _MysignupState extends State<Mysignup> {
       Response response1 = await Dio().get(url1);
       Response response2 = await Dio().get(url2);
       if (response1.toString() == 'null' && response2.toString() == 'null') {
-        insertadmin();
+        uploadphotoaddim();
       } else {
         // ignore: use_build_context_synchronously
         mydialog(context, 'plaese chang username...!');
@@ -132,7 +138,7 @@ class _MysignupState extends State<Mysignup> {
 
   Future<void> insertadmin() async {
     String url =
-        "${Myconstant().domain}/projectsabaykot/insertadmin.php?isAdd=true&nameuser=$nameuser&username=$username&password=$password&phone=$phone&address=$address&status=admin";
+        "${Myconstant().domain}/projectsabaykot/insertadmin.php?isAdd=true&picture=$urlpicture&nameuser=$nameuser&username=$username&password=$password&phone=$phone&address=$address&status=admin";
 
     try {
       Response response = await Dio().get(url);
@@ -150,6 +156,45 @@ class _MysignupState extends State<Mysignup> {
     }
   }
 
+  Future<void> chooseimages(ImageSource imageSource) async {
+    try {
+      var object = await ImagePicker().pickImage(
+        source: imageSource,
+        maxHeight: 800.0,
+        maxWidth: 700.0,
+      );
+      setState(() {
+        file = File(object!.path);
+      });
+    } catch (e) {}
+  }
+
+  Future<void> uploadphotoaddim() async {
+    Random random = Random();
+    int i = random.nextInt(100000000);
+    String nameimage = "addmin$i.jpg";
+
+    String urlphoto =
+        "${Myconstant().domain}/projectsabaykot/uploadPhotoToserver.php";
+
+    try {
+      if (file == null) {
+        urlpicture = "/projectsabaykot/PhotoAddim/logo.jpg";
+        insertadmin();
+      } else {
+        Map<String, dynamic> map = {};
+        map["file"] =
+            await MultipartFile.fromFile(file!.path, filename: nameimage);
+        FormData formData = FormData.fromMap(map);
+        await Dio().post(urlphoto, data: formData).then((value) {
+          print("=====================>$value");
+          urlpicture = "/projectsabaykot/PhotoAddim/$nameimage";
+          insertadmin();
+        });
+      }
+    } catch (e) {}
+  }
+
   Widget buildpicture() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -157,26 +202,33 @@ class _MysignupState extends State<Mysignup> {
         SizedBox(
           width: widths * 0.15,
           child: IconButton(
-            onPressed: () {},
+            onPressed: () => chooseimages(ImageSource.camera),
             icon: Image.asset("images/image3.png"),
           ),
         ),
         Container(
-          margin: const EdgeInsets.all(15.0),
-          width: widths * 0.42,
-          height: widths * 0.42,
-          decoration: BoxDecoration(
-            border: Border.all(width: 3.0, color: Color(Myconstant().appbar)),
-            shape: BoxShape.circle,
-            image: const DecorationImage(
-              image: AssetImage("images/logo.jpg"),
-            ),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(50.0)),
+          child: Container(
+              margin: const EdgeInsets.all(15.0),
+              width: widths * 0.46,
+              height: widths * 0.47,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                    color: Colors.amber.shade900,
+                    width: 4.0,
+                    style: BorderStyle.solid),
+                image: file == null
+                    ? const DecorationImage(
+                        image: AssetImage("images/logo.jpg"), fit: BoxFit.fill)
+                    : DecorationImage(
+                        image: FileImage(file!), fit: BoxFit.fill),
+              )),
         ),
         SizedBox(
           width: widths * 0.15,
           child: IconButton(
-            onPressed: () {},
+            onPressed: () => chooseimages(ImageSource.gallery),
             icon: Image.asset("images/image2.png"),
           ),
         ),
@@ -186,7 +238,7 @@ class _MysignupState extends State<Mysignup> {
 
   Widget textfieldname() {
     return Container(
-      margin: const EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         color: Colors.white54,

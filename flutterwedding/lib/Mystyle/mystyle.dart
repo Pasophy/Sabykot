@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 
 class Mystyle {
@@ -65,6 +66,26 @@ class Mystyle {
       child: CircularProgressIndicator(),
     );
   }
+
+  showalertmessage() {
+    Fluttertoast.showToast(
+        msg: "successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
+    Widget showeventdetail(text, color) => Text(
+        text,
+        style: TextStyle(
+            fontSize: 18.0, fontWeight: FontWeight.bold, color: color),
+      );
+
+      
+
 
   Mystyle();
 }
