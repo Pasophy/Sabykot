@@ -140,7 +140,7 @@ class _MysigninState extends State<Mysignin> {
           usermodel = Usermodel.fromJson(map);
           if (password == usermodel!.password &&
               username == usermodel!.username) {
-            routetoservice(Mymainusers(usermodel: usermodel!), usermodel!);
+            routetoservice(const Mymainusers(), usermodel!);
           } else {
             // ignore: use_build_context_synchronously
             mydialog(context, 'check password uername...!');
@@ -156,9 +156,9 @@ class _MysigninState extends State<Mysignin> {
   Future<void> checkpreferencescustomer(Customermodel customermodel) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('idcustomer', customermodel.idcustomer.toString());
+    preferences.setString('usertype', customermodel.status.toString());
     preferences.setString(
         'usercustomer', customermodel.usercustomer.toString());
-    preferences.setString('customertype', customermodel.status.toString());
   }
 
   Future<void> checkpreferenceuser(Usermodel usermodel) async {

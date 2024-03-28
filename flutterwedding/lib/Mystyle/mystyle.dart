@@ -84,7 +84,11 @@ class Mystyle {
             fontSize: 18.0, fontWeight: FontWeight.bold, color: color),
       );
 
-      
+      Widget showtitleevent(text, color) => Text(
+        text,
+        style: TextStyle(
+            fontSize: 30.0, fontWeight: FontWeight.bold, color: color),
+      );
 
 
   Mystyle();

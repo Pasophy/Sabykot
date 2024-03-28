@@ -1,10 +1,11 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mycreen/maincustomer.dart';
 import 'package:flutterwedding/Mycreen/mainusers_screen.dart';
+import 'package:flutterwedding/Mymodel/customermodel.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/drawer_homescreen.dart';
@@ -21,7 +22,9 @@ class Myhomecreen extends StatefulWidget {
 
 class _MyhomecreenState extends State<Myhomecreen> {
   Usermodel? usermodel;
-  String? username;
+  Customermodel? customermodel;
+  String? usertype;
+  String? usercusname;
   @override
   void initState() {
     super.initState();
@@ -32,36 +35,18 @@ class _MyhomecreenState extends State<Myhomecreen> {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       setState(() {
-        username = preferences.getString('username');
-        if (username != null) {
-          getuserwhereulogin();
+        usertype = preferences.getString('usertype');
+        usercusname = preferences.getString("usercustomer");
+        if (usertype == "admin") {
+          routrtoservice(const Mymainusers());
+        } else if (usertype == "customer") {
+          routrtoservice(const Maincustomer());
         }
       });
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'Error');
+      mydialog(context, 'no internet');
     }
-  }
-
-  Future<void> getuserwhereulogin() async {
-    String url =
-        "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$username";
-
-    try {
-      await Dio().get(url).then((value) {
-        var result = json.decode(value.data);
-        if (result.toString() != 'null') {
-          for (var map in result) {
-           setState(() {
-              usermodel = Usermodel.fromJson(map);
-           });
-          }
-          routrtoservice(Mymainusers(usermodel: usermodel!));
-        } else {
-          mydialog(context, 'មិនទាន់មានអ្នកប្រើ ...!');
-        }
-      });
-    } catch (e) {}
   }
 
   void routrtoservice(Widget widget) {

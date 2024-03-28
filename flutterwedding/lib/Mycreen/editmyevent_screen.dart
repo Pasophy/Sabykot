@@ -6,39 +6,49 @@ import 'package:date_format/date_format.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
-import 'package:flutterwedding/Mymodel/usermodel.dart';
+import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Addevents extends StatefulWidget {
-  final Usermodel usermodel;
-  const Addevents({
+class Editmyevents extends StatefulWidget {
+  final List<Eventsmodel> eventsmodel;
+  final int index;
+  const Editmyevents({
     Key? key,
-    required this.usermodel,
+    required this.eventsmodel,
+    this.index = 0,
   }) : super(key: key);
 
   @override
-  State<Addevents> createState() => _AddeventsState();
+  State<Editmyevents> createState() => _EditmyeventsState();
 }
 
-class _AddeventsState extends State<Addevents> {
-  Usermodel? usermodel;
+class _EditmyeventsState extends State<Editmyevents> {
+  List<Eventsmodel> eventsmodels = [];
+  int? index;
   late double widths, hieghts;
+  String? oldurlpicture, urlpicture;
   File? file;
-  String? urlpicture;
   final TextEditingController eventdatecontroller = TextEditingController();
   final TextEditingController expridatecontrollor = TextEditingController();
   final TextEditingController eventtimecontroller = TextEditingController();
-  String? iduser, nameuser, eventname, eventdetail;
+  String? idevent, eventname, eventdetail;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    usermodel = widget.usermodel;
-    iduser = usermodel!.iduser;
-    nameuser = usermodel!.nameuser;
+    eventsmodels = widget.eventsmodel;
+    index = widget.index;
+    idevent = eventsmodels[index!].idevent;
+    eventname = eventsmodels[index!].eventname;
+    eventdetail = eventsmodels[index!].eventdetail;
+    oldurlpicture = eventsmodels[index!].picture;
+    urlpicture = "${Myconstant().domain}${eventsmodels[index!].picture}";
+    eventdatecontroller.text = eventsmodels[index!].eventdate!;
+    eventtimecontroller.text = eventsmodels[index!].eventtime!;
+    expridatecontrollor.text = eventsmodels[index!].expridate!;
   }
 
   @override
@@ -56,10 +66,7 @@ class _AddeventsState extends State<Addevents> {
             size: 45.0,
           ),
         ),
-        title: Container(
-          margin: const EdgeInsets.only(left: 50.0),
-          child: Mystyle().showtitle1("ADD EVENTS", Colors.white),
-        ),
+        title: Mystyle().showtitle1("EDIT EVENT", Colors.white),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
@@ -78,7 +85,7 @@ class _AddeventsState extends State<Addevents> {
               evntexpridatedate(),
               builddetailevents(),
               const SizedBox(height: 30.0),
-              buildcreatebuttom(),
+              buildeditbuttom(),
             ],
           ),
         ),
@@ -86,9 +93,9 @@ class _AddeventsState extends State<Addevents> {
     );
   }
 
-  Future<void> insertevents() async {
+  Future<void> updatevents() async {
     String url =
-        "${Myconstant().domain}/projectsabaykot/insertEvents.php?isAdd=true&iduser=$iduser&nameuser=$nameuser&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&expridate=${expridatecontrollor.text}&status=disable";
+        "${Myconstant().domain}/projectsabaykot/EditEventsWhereid.php?isAdd=true&idevent=$idevent&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&expridate=${expridatecontrollor.text}&status=disable";
     try {
       await Dio().get(url).then((value) {
         var result = json.decode(value.data); //chang unicode8
@@ -124,15 +131,16 @@ class _AddeventsState extends State<Addevents> {
         "${Myconstant().domain}/projectsabaykot/uploadPhotoeventsToserver.php";
     try {
       if (file == null) {
-        urlpicture = "/projectsabaykot/PhotoEvents/logo.jpg";
-        insertevents();
+        urlpicture = "$oldurlpicture";
+        updatevents();
       } else {
         Map<String, dynamic> map = {};
-        map["file"] = await MultipartFile.fromFile(file!.path,filename: nameimage);
+        map["file"] =
+            await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
         Dio().post(urlimage, data: formData).then((value) {
           urlpicture = "/projectsabaykot/PhotoEvents/$nameimage";
-          insertevents();
+          updatevents();
         });
       }
     } catch (e) {}
@@ -156,8 +164,8 @@ class _AddeventsState extends State<Addevents> {
             border: Border.all(width: 3.0, color: Color(Myconstant().appbar)),
             shape: BoxShape.circle,
             image: file == null
-                ? const DecorationImage(
-                    image: AssetImage("images/logo.jpg"),
+                ? DecorationImage(
+                    image: NetworkImage("$urlpicture"),
                   )
                 : DecorationImage(
                     image: FileImage(file!),
@@ -184,7 +192,8 @@ class _AddeventsState extends State<Addevents> {
       ),
       height: 50.0,
       width: widths * 0.67,
-      child: TextField(
+      child: TextFormField(
+        initialValue: eventname,
         onChanged: (value) => eventname = value.toString(),
         decoration: InputDecoration(
           labelText: 'Eventname:',
@@ -232,8 +241,9 @@ class _AddeventsState extends State<Addevents> {
       ),
       height: 110.0,
       width: widths * 0.67,
-      child: TextField(
+      child: TextFormField(
         maxLines: 5,
+        initialValue: eventdetail,
         onChanged: (value) => eventdetail = value.toString(),
         decoration: InputDecoration(
           labelText: 'Eventdetail:',
@@ -465,11 +475,10 @@ class _AddeventsState extends State<Addevents> {
     );
   }
 
-  FilledButton buildcreatebuttom() {
+  FilledButton buildeditbuttom() {
     return FilledButton(
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStatePropertyAll(Colors.blue.shade700),
+        backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
@@ -488,7 +497,7 @@ class _AddeventsState extends State<Addevents> {
           print("$eventname,$eventdetail,${eventdatecontroller.value}");
         }
       },
-      child: Mystyle().showtitle1("Create", Colors.white),
+      child: Mystyle().showtitle1("Edit", Colors.white),
     );
   }
 }

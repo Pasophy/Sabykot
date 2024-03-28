@@ -1,28 +1,28 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mycreen/myhome_screen.dart';
 import 'package:flutterwedding/Mycreen/search_event_screen.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
+import 'package:flutterwedding/Myutilities/mydialog.dart';
 import 'package:flutterwedding/Myutilities/opendrawer.dart';
+import 'package:flutterwedding/widget/listevent_exprid.dart';
 import 'package:flutterwedding/widget/listevents_widget.dart';
-import 'package:flutterwedding/widget/listguestes_wiget.dart';
 import 'package:flutterwedding/widget/mycustomer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Mymainusers extends StatefulWidget {
-  final Usermodel usermodel;
-  const Mymainusers({
-    Key? key,
-    required this.usermodel,
-  }) : super(key: key);
+  const Mymainusers({super.key});
 
   @override
   State<Mymainusers> createState() => _MymainusersState();
 }
 
 class _MymainusersState extends State<Mymainusers> {
-  Usermodel? usermodels;
+  Usermodel? usermodel;
   String? iduser, nameuser, usertype;
   String? idcustomer, usercustomer, customertype;
   SharedPreferences? preferences;
@@ -44,8 +44,6 @@ class _MymainusersState extends State<Mymainusers> {
     setState(() {
       finduser();
     });
-    usermodels = widget.usermodel;
-    currentwidget = Myevents(usermodel: usermodels!);
   }
 
   Future<void> finduser() async {
@@ -53,10 +51,28 @@ class _MymainusersState extends State<Mymainusers> {
     iduser = preferences!.getString("iduser");
     nameuser = preferences!.getString('username');
     usertype = preferences!.getString("usertype");
-    idcustomer = preferences!.getString("idcustomer");
-    usercustomer = preferences!.getString("usercustomer");
-    customertype = preferences!.getString("customertype");
+
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$nameuser";
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
+      if (response.toString() == 'null') {
+      } else {
+        for (var map in result) {
+          usermodel = Usermodel.fromJson(map);
+          setState(() {
+            currentwidget = Myevents(usermodel: usermodel!);
+          });
+        }
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      mydialog(context, 'user error==>ok');
+    }
   }
+
+  Future<void> getuserwhereulogin() async {}
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +80,7 @@ class _MymainusersState extends State<Mymainusers> {
     heights = MediaQuery.sizeOf(context).height;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade600,
+        backgroundColor: Color(Myconstant().appbar),
         leading: opendrawer(),
         actions: [
           showseach
@@ -74,7 +90,7 @@ class _MymainusersState extends State<Mymainusers> {
                     onPressed: () {
                       MaterialPageRoute route = MaterialPageRoute(
                         builder: (context) =>
-                            Searchevent(usermodel: usermodels!),
+                            Searchevent(usermodel: usermodel!),
                       );
                       Navigator.push(context, route);
                     },
@@ -94,7 +110,7 @@ class _MymainusersState extends State<Mymainusers> {
         ),
       ),
       drawer: drawermainuser(),
-      body: currentwidget,
+      body: usermodel == null ? Mystyle().showprogress() : currentwidget,
     );
   }
 
@@ -108,7 +124,7 @@ class _MymainusersState extends State<Mymainusers> {
               const SizedBox(height: 15.0),
               menuevents(),
               menucustomer(),
-              menugueste(),
+              menueventexprid(),
             ],
           ),
           boildlogo(),
@@ -133,7 +149,7 @@ class _MymainusersState extends State<Mymainusers> {
         setState(() {
           showseach = true;
           index = 0;
-          currentwidget = Myevents(usermodel: usermodels!);
+          currentwidget = Myevents(usermodel: usermodel!);
         });
         Navigator.pop(context);
       },
@@ -175,7 +191,7 @@ class _MymainusersState extends State<Mymainusers> {
     );
   }
 
-  Widget menugueste() {
+  Widget menueventexprid() {
     return ListTile(
       leading: SizedBox(
           height: 40.0,
@@ -188,14 +204,14 @@ class _MymainusersState extends State<Mymainusers> {
               color: Colors.white,
             ),
           )),
-      title:
-          Mystyle().showtitle2(" EVENTEXPRID", Color(Myconstant().iconcolor)),
+      title: Mystyle()
+          .showtitle2(" EVENTEXPRIDATE", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
-        showseach = false;
+        showseach = true;
         setState(() {
           index = 2;
-          currentwidget = const Myguestes();
+          currentwidget = Eventsexprid(usermodel: usermodel!);
         });
         Navigator.pop(context);
       },

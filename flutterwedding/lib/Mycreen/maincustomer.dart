@@ -1,24 +1,32 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mycreen/myhome_screen.dart';
+import 'package:flutterwedding/Mymodel/customermodel.dart';
+import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
-import 'package:flutterwedding/widget/listevents_widget.dart';
-import 'package:flutterwedding/widget/listguestes_wiget.dart';
-import 'package:flutterwedding/widget/mycustomer_widget.dart';
+import 'package:flutterwedding/Myutilities/mydialog.dart';
+import 'package:flutterwedding/Myutilities/opendrawer.dart';
+import 'package:flutterwedding/widget/event_customer.dart';
+import 'package:flutterwedding/widget/guest_events.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Maincustomer extends StatefulWidget {
   const Maincustomer({super.key});
-
   @override
   State<Maincustomer> createState() => _MaincustomerState();
 }
 
 class _MaincustomerState extends State<Maincustomer> {
+  Customermodel? customermodel;
+  Eventsmodel? eventsmodel;
+  List<Eventsmodel> listevents = [];
   int index = 0;
-  String? idcustomer, customeruser, namecustomer;
-  Widget currentwidget = const Mycustomer();
+  String? idevent, idcustomer, customeruser, customertype;
+  Widget? currentwidget;
   SharedPreferences? preferences;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,8 +37,30 @@ class _MaincustomerState extends State<Maincustomer> {
   Future<void> checkcustomerlongin() async {
     preferences = await SharedPreferences.getInstance();
     idcustomer = preferences!.getString("idcustomer");
-    namecustomer = preferences!.getString("namecustomer");
-    customeruser = preferences!.getString("customeruser");
+    customertype = preferences!.getString("usertype");
+    customeruser = preferences!.getString("usercustomer");
+
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getcustomerWhereUsercustomer.php?isAdd=true&usercustomer=$customeruser";
+    try {
+      Response response = await Dio().get(url);
+      var result = json.decode(response.data);
+      if (response.toString() == 'null') {
+        // ignore: use_build_context_synchronously
+        mydialog(context, 'No username ...!');
+      } else {
+        for (var map in result) {
+          setState(() {
+            customermodel = Customermodel.fromJson(map);
+            idevent = customermodel!.idevent;
+           currentwidget = Customerevent(customermodel: customermodel!);
+          });
+        }
+      }
+    } catch (e) {
+      // ignore: use_build_context_synchronously
+      mydialog(context, 'customer error==>ok');
+    }
   }
 
   @override
@@ -38,7 +68,29 @@ class _MaincustomerState extends State<Maincustomer> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(Myconstant().appbar),
-        title: Mystyle().showtitle1("MAIN CUSTOMER", Colors.white),
+        leading: opendrawer(),
+        title: Mystyle().showtitle1("MAINCUSTOMER", Colors.white),
+      ),
+      drawer: drawermaincustomer(),
+      body: currentwidget,
+    );
+  }
+
+  Widget drawermaincustomer() {
+    return Drawer(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              drawerheader(),
+              const SizedBox(height: 15.0),
+              menuevents(),
+              menugueste(),
+            ],
+          ),
+          boildlogo(),
+          menulogout(),
+        ],
       ),
     );
   }
@@ -52,35 +104,13 @@ class _MaincustomerState extends State<Maincustomer> {
             backgroundColor: Color(Myconstant().iconcolor),
             child: const Icon(Icons.event, size: 25.0, color: Colors.white),
           )),
-      title: Mystyle().showtitle2(" EVENTS", Color(Myconstant().iconcolor)),
+      title: Mystyle().showtitle2("  EVENTS", Color(Myconstant().iconcolor)),
       hoverColor: Colors.red,
       onTap: () {
         setState(() {
           index = 0;
-          //currentwidget = const Myevents();
+          currentwidget = Customerevent(customermodel: customermodel!);
         });
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  Widget menucustomer() {
-    return ListTile(
-      leading: SizedBox(
-          height: 40.0,
-          width: 40.0,
-          child: CircleAvatar(
-            backgroundColor: Color(Myconstant().iconcolor),
-            child: const Icon(
-              Icons.attribution,
-              size: 30.0,
-              color: Colors.white,
-            ),
-          )),
-      title: Mystyle().showtitle2(" CUSTOMER", Color(Myconstant().iconcolor)),
-      hoverColor: Colors.black54,
-      onTap: () {
-        setState(() {});
         Navigator.pop(context);
       },
     );
@@ -99,13 +129,12 @@ class _MaincustomerState extends State<Maincustomer> {
               color: Colors.white,
             ),
           )),
-      title:
-          Mystyle().showtitle2(" EVENTEXPRID", Color(Myconstant().iconcolor)),
+      title: Mystyle().showtitle2(" GUESTS", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
         setState(() {
           index = 2;
-          currentwidget = const Myguestes();
+          currentwidget = const Guestevents();
         });
         Navigator.pop(context);
       },
