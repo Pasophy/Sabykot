@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
@@ -9,12 +10,15 @@ import 'package:flutterwedding/Mycreen/myuser_eventsscreen.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
+import 'package:flutterwedding/widget/showallguestevent.dart';
 
 class Myevents extends StatefulWidget {
   final Usermodel usermodel;
+  final String? eventdate;
   const Myevents({
     Key? key,
     required this.usermodel,
+    this.eventdate,
   }) : super(key: key);
 
   @override
@@ -23,6 +27,7 @@ class Myevents extends StatefulWidget {
 
 class _MyeventsState extends State<Myevents> {
   late double widths, heights;
+  String? eventdate, iduser;
   Usermodel? usermodel;
   Eventsmodel? eventmodel;
   bool status = true;
@@ -34,13 +39,16 @@ class _MyeventsState extends State<Myevents> {
     // TODO: implement initState
     super.initState();
     usermodel = widget.usermodel;
+    eventdate = widget.eventdate;
+    iduser = usermodel!.iduser;
     setState(() {
       getallevents();
     });
   }
 
   Future<void> getallevents() async {
-    String url = "${Myconstant().domain}/projectsabaykot/getAllDataevents.php";
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getEventWhereIdadmin.php?isAdd=true&iduser=$iduser";
     await Dio().get(url).then((value) {
       setState(() {
         loadstatus = false;
@@ -52,6 +60,13 @@ class _MyeventsState extends State<Myevents> {
           eventmodel = Eventsmodel.fromJson(map);
           setState(() {
             listeventmodel.add(eventmodel!);
+            // var date = eventmodel!.expridate;
+            // DateTime d1 =
+            //     DateFormat('dd-MM-yyyy', 'en_US').parse(date.toString());
+            // DateTime d2 = DateTime.now();
+            // if (d1.isAfter(d2)) {
+            //
+            // }
           });
         }
       } else {
@@ -176,8 +191,6 @@ class _MyeventsState extends State<Myevents> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          print(
-                              "==============>id==${listeventmodel[index].idevent}");
                           MaterialPageRoute route = MaterialPageRoute(
                             builder: (context) => Addcustomer(
                                 usermodel: usermodel!,
@@ -190,7 +203,7 @@ class _MyeventsState extends State<Myevents> {
                         ),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("adduser", Colors.red)
+                  Mystyle().showtitle4("បញ្ចូលអ្នកប្រើ", Colors.red)
                 ],
               ),
               Column(
@@ -213,7 +226,7 @@ class _MyeventsState extends State<Myevents> {
                         ),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("showuser", Colors.red)
+                  Mystyle().showtitle4("បង្ហាញអ្នកប្រើ", Colors.red)
                 ],
               ),
               Column(
@@ -224,11 +237,17 @@ class _MyeventsState extends State<Myevents> {
                         color: Colors.white,
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Showallguestevent(
+                                idevent: listeventmodel[index].idevent!),
+                          );
+                          Navigator.push(context, route);
+                        },
                         icon: const Icon(Icons.diversity_1),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("showguest", Colors.red)
+                  Mystyle().showtitle4("បង្ហាញភ្ញៀវ", Colors.red)
                 ],
               ),
               Column(
@@ -252,7 +271,7 @@ class _MyeventsState extends State<Myevents> {
                         icon: const Icon(Icons.edit),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("editevent", Colors.red)
+                  Mystyle().showtitle4("កែប្រែកម្មវិធី", Colors.red)
                 ],
               )
             ],
@@ -265,7 +284,7 @@ class _MyeventsState extends State<Myevents> {
     );
   }
 
-  Container buttomaddevents() {
+  Widget buttomaddevents() {
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0, right: 10.0),
       child: Row(

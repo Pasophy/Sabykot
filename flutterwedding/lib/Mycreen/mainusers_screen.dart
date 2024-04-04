@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
@@ -9,7 +8,6 @@ import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
 import 'package:flutterwedding/Myutilities/opendrawer.dart';
-import 'package:flutterwedding/widget/listevent_exprid.dart';
 import 'package:flutterwedding/widget/listevents_widget.dart';
 import 'package:flutterwedding/widget/mycustomer_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,11 +27,12 @@ class _MymainusersState extends State<Mymainusers> {
   Widget? currentwidget;
   late double widths, heights;
   bool showseach = true;
+  String? eventdate = "newevent";
 
   List<Widget> listwidget = [
-    Mystyle().showtitle1("MY EVENTS", Colors.white),
-    Mystyle().showtitle1("MY CUSTOMER", Colors.white),
-    Mystyle().showtitle1(" EVENTEXPRID", Colors.white),
+    Mystyle().showtitle1("កម្មវិធីរបស់ខ្ញុំ", Colors.white),
+    Mystyle().showtitle1("អ្នកប្រើកម្មវីធី", Colors.white),
+    Mystyle().showtitle1("កម្មវិធីផុតកំណត់", Colors.white),
     textfieldsearch(),
   ];
 
@@ -68,7 +67,7 @@ class _MymainusersState extends State<Mymainusers> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'user error==>ok');
+      mydialog(context, 'no connection');
     }
   }
 
@@ -89,8 +88,8 @@ class _MymainusersState extends State<Mymainusers> {
                   child: IconButton(
                     onPressed: () {
                       MaterialPageRoute route = MaterialPageRoute(
-                        builder: (context) =>
-                            Searchevent(usermodel: usermodel!),
+                        builder: (context) => Searchevent(
+                            usermodel: usermodel!, eventdate: eventdate),
                       );
                       Navigator.push(context, route);
                     },
@@ -109,7 +108,7 @@ class _MymainusersState extends State<Mymainusers> {
           ),
         ),
       ),
-      drawer: drawermainuser(),
+      drawer: usermodel == null ? Mystyle().showprogress() : drawermainuser(),
       body: usermodel == null ? Mystyle().showprogress() : currentwidget,
     );
   }
@@ -124,7 +123,7 @@ class _MymainusersState extends State<Mymainusers> {
               const SizedBox(height: 15.0),
               menuevents(),
               menucustomer(),
-              menueventexprid(),
+             
             ],
           ),
           boildlogo(),
@@ -143,10 +142,12 @@ class _MymainusersState extends State<Mymainusers> {
             backgroundColor: Color(Myconstant().iconcolor),
             child: const Icon(Icons.event, size: 25.0, color: Colors.white),
           )),
-      title: Mystyle().showtitle2(" EVENTS", Color(Myconstant().iconcolor)),
+      title: Mystyle()
+          .showtitle2(" កម្មវិធីរបស់ខ្ញុំ", Color(Myconstant().iconcolor)),
       hoverColor: Colors.red,
       onTap: () {
         setState(() {
+          eventdate = "newevent";
           showseach = true;
           index = 0;
           currentwidget = Myevents(usermodel: usermodel!);
@@ -169,7 +170,8 @@ class _MymainusersState extends State<Mymainusers> {
               color: Colors.white,
             ),
           )),
-      title: Mystyle().showtitle2(" CUSTOMER", Color(Myconstant().iconcolor)),
+      title: Mystyle()
+          .showtitle2(" អ្នបប្រើកម្មវិធី", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
         setState(() {
@@ -185,33 +187,6 @@ class _MymainusersState extends State<Mymainusers> {
                   usertype: customertype!,
                   iduser: idcustomer,
                   nameuser: usercustomer);
-        });
-        Navigator.pop(context);
-      },
-    );
-  }
-
-  Widget menueventexprid() {
-    return ListTile(
-      leading: SizedBox(
-          height: 40.0,
-          width: 40.0,
-          child: CircleAvatar(
-            backgroundColor: Color(Myconstant().iconcolor),
-            child: const Icon(
-              Icons.event_available,
-              size: 25.0,
-              color: Colors.white,
-            ),
-          )),
-      title: Mystyle()
-          .showtitle2(" EVENTEXPRIDATE", Color(Myconstant().iconcolor)),
-      hoverColor: Colors.black54,
-      onTap: () {
-        showseach = true;
-        setState(() {
-          index = 2;
-          currentwidget = Eventsexprid(usermodel: usermodel!);
         });
         Navigator.pop(context);
       },
@@ -238,12 +213,11 @@ class _MymainusersState extends State<Mymainusers> {
                   backgroundColor: Color(Myconstant().iconcolor),
                   child: const Icon(
                     Icons.output,
-                    size: 25.0,
+                    size: 30.0,
                     color: Colors.white,
                   ),
                 )),
-            title:
-                Mystyle().showtitle2("LOG OUT", Color(Myconstant().iconcolor)),
+            title: Mystyle().showtitle1("ចាកចេញ", Colors.white),
             hoverColor: Colors.black54,
             onTap: () {
               preferences!.clear();
@@ -274,29 +248,29 @@ class _MymainusersState extends State<Mymainusers> {
   Widget boildlogo() {
     return Center(
       child: Container(
-        margin: const EdgeInsets.only(top: 35.0),
+        margin: const EdgeInsets.only(top: 20.0),
         child: Column(
           children: [
             Container(
-              height: 130.0,
-              width: 130.0,
+              margin: const EdgeInsets.all(8.0),
+              width: widths * 0.35,
+              height: widths * 0.3,
               decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(
+                      "${Myconstant().domain}${usermodel!.picture}"),
+                ),
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.white,
-                  style: BorderStyle.solid,
-                  width: 2.5,
+                  color: Colors.white70,
+                  width: 5.01,
+                  strokeAlign: 0.3,
                 ),
               ),
-              child: const CircleAvatar(
-                backgroundImage: ExactAssetImage("images/logo.jpg"),
-              ),
             ),
-            nameuser != null
-                ? Mystyle()
-                    .showtitle1("user $nameuser", Color(Myconstant().iconcolor))
-                : Mystyle().showtitle1(
-                    "user $usercustomer", Color(Myconstant().iconcolor)),
+            Mystyle().showtitle1(
+                "${usermodel!.nameuser}", Color(Myconstant().iconcolor))
           ],
         ),
       ),

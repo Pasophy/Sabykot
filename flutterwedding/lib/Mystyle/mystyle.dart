@@ -7,10 +7,10 @@ class Mystyle {
     return Text(
       string,
       style: TextStyle(
-        color: color,
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
+          color: color,
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Battambang'),
     );
   }
 
@@ -18,10 +18,10 @@ class Mystyle {
     return Text(
       string,
       style: TextStyle(
-        color: color,
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
-      ),
+          color: color,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Battambang'),
     );
   }
 
@@ -29,10 +29,10 @@ class Mystyle {
     return Text(
       string,
       style: TextStyle(
-        color: color,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
+          color: color,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Battambang'),
     );
   }
 
@@ -40,14 +40,14 @@ class Mystyle {
     return Text(
       string,
       style: TextStyle(
-        color: color,
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-      ),
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          fontFamily: 'Battambang'),
     );
   }
 
-   Widget showinformation(String text) => Center(
+  Widget showinformation(String text) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -55,6 +55,7 @@ class Mystyle {
                 style: TextStyle(
                   fontSize: 28.0,
                   fontWeight: FontWeight.bold,
+                  fontFamily: 'Battambang',
                   color: Color(Myconstant().iconcolor),
                 )),
           ],
@@ -78,18 +79,19 @@ class Mystyle {
         fontSize: 16.0);
   }
 
-    Widget showeventdetail(text, color) => Text(
+  Widget showeventdetail(text, color) => Text(
         text,
         style: TextStyle(
-            fontSize: 18.0, fontWeight: FontWeight.bold, color: color),
+            fontSize: 18.0, fontWeight: FontWeight.bold, color: color,
+            fontFamily: 'Battambang'),
       );
 
-      Widget showtitleevent(text, color) => Text(
+  Widget showtitleevent(text, color) => Text(
         text,
         style: TextStyle(
-            fontSize: 30.0, fontWeight: FontWeight.bold, color: color),
+            fontSize: 30.0, fontWeight: FontWeight.bold, color: color,
+            fontFamily: 'Battambang'),
       );
-
 
   Mystyle();
 }

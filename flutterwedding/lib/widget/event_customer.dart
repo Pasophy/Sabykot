@@ -8,6 +8,8 @@ import 'package:flutterwedding/Mymodel/customermodel.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
+import 'package:flutterwedding/Mycreen/showguest_yoursubadd.dart';
+import 'package:flutterwedding/Mycreen/showguest_your_event.dart';
 
 class Customerevent extends StatefulWidget {
   final Customermodel customermodel;
@@ -23,7 +25,7 @@ class Customerevent extends StatefulWidget {
 class _CustomereventState extends State<Customerevent> {
   Eventsmodel? eventsmodel;
   Customermodel? customermodel;
-  String? idevent;
+  String? idevent, idcustomer;
   List<Eventsmodel> listevents = [];
   bool status = true;
   bool loadstatus = true;
@@ -36,6 +38,7 @@ class _CustomereventState extends State<Customerevent> {
     setState(() {
       customermodel = widget.customermodel;
       idevent = customermodel!.idevent;
+      idcustomer = customermodel!.idcustomer!;
       geteventwhereid();
     });
   }
@@ -99,7 +102,7 @@ class _CustomereventState extends State<Customerevent> {
           padding: const EdgeInsets.only(top: 5.0),
           decoration: BoxDecoration(
               color: Colors.brown.shade50,
-              border: Border(top: BorderSide(color: Colors.brown.shade200))),
+              border: Border(top: BorderSide(color: Colors.brown.shade100))),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -117,7 +120,6 @@ class _CustomereventState extends State<Customerevent> {
                                 Myuserevents(idevent: eventsmodel!.idevent!),
                           );
                           Navigator.push(context, route);
-                          print("==================>${eventsmodel!.idevent!}");
                         },
                         icon: const Icon(
                           Icons.group,
@@ -125,7 +127,7 @@ class _CustomereventState extends State<Customerevent> {
                         ),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("showuser", Colors.red)
+                  Mystyle().showtitle4("អ្នកប្រើ", Colors.red)
                 ],
               ),
               Column(
@@ -136,11 +138,17 @@ class _CustomereventState extends State<Customerevent> {
                         color: Color(Myconstant().iconcolor),
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) =>
+                                Showyourguest(idevent: idevent),
+                          );
+                          Navigator.push(context, route);
+                        },
                         icon: const Icon(Icons.diversity_1),
                         color: Colors.white,
                       )),
-                  Mystyle().showtitle4("showguest", Colors.red)
+                  Mystyle().showtitle4("បង្ហាញភ្ញៀវ", Colors.red)
                 ],
               ),
               Column(
@@ -151,13 +159,18 @@ class _CustomereventState extends State<Customerevent> {
                         color: Color(Myconstant().iconcolor),
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Gusetcustadd(idcustomer: idcustomer),
+                          );
+                          Navigator.push(context, route);
+                        },
                         icon: const Icon(
                           Icons.group_add,
                         ),
                         color: Colors.white,
                       )),
-                  Mystyle().showtitle4("addguest", Colors.red)
+                  Mystyle().showtitle4("បញ្ជូលភ្ញៀវ", Colors.red)
                 ],
               ),
             ],
@@ -197,7 +210,7 @@ class _CustomereventState extends State<Customerevent> {
                 Container(
                   margin: const EdgeInsets.all(20.0),
                   width: widths * 0.7,
-                  height: widths * 0.8,
+                  height: widths * 0.75,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.fill,
@@ -237,9 +250,9 @@ class _CustomereventState extends State<Customerevent> {
                 ],
               ),
             ),
-            const SizedBox(height: 15.0),
+            const SizedBox(height: 5.0),
             Mystyle().showtitle2(
-                "detail: ${listevents[index].eventdetail}", Colors.blue),
+                "ព័ត៌មានលម្អិត: ${listevents[index].eventdetail}", Colors.blue),
             const SizedBox(height: 30.0),
             const SizedBox(
               height: 25.0,

@@ -1,5 +1,6 @@
 class Usermodel {
   String? iduser;
+  String? picture;
   String? nameuser;
   String? username;
   String? password;
@@ -9,6 +10,7 @@ class Usermodel {
 
   Usermodel(
       {this.iduser,
+      this.picture,
       this.nameuser,
       this.username,
       this.password,
@@ -18,6 +20,7 @@ class Usermodel {
 
   Usermodel.fromJson(Map<String, dynamic> json) {
     iduser = json['iduser'];
+    picture = json['picture'];
     nameuser = json['nameuser'];
     username = json['username'];
     password = json['password'];
@@ -29,6 +32,7 @@ class Usermodel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['iduser'] = iduser;
+    data['picture'] = picture;
     data['nameuser'] = nameuser;
     data['username'] = username;
     data['password'] = password;

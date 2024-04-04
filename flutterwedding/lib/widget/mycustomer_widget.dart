@@ -45,19 +45,14 @@ class _MycustomerState extends State<Mycustomer> {
     setState(() {
       display_list = listcustomer
           .where((element) =>
-              element.usercustomer!.toLowerCase().contains(value.toLowerCase()))
+              element.namecustomer!.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
 
   Future<void> getcuswhereulogin() async {
-    String url;
-    if (userlogin == "admin") {
-      url = "${Myconstant().domain}/projectsabaykot/getAllDatacustomer.php";
-    } else {
-      url =
-          "${Myconstant().domain}/projectsabaykot/getcustomerWhereUsercustomer.php?isAdd=true&usercustomer=$namelogin";
-    }
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getCustomerWhereIduser.php?isAdd=true&iduser=$idlogin";
     try {
       await Dio().get(url).then((value) {
         setState(() {
@@ -82,7 +77,6 @@ class _MycustomerState extends State<Mycustomer> {
       });
     } catch (e) {}
   }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -92,7 +86,27 @@ class _MycustomerState extends State<Mycustomer> {
       child: Scaffold(
         body: Stack(
           children: [
-            loadstatus ? Mystyle().showprogress() : showcontents(),
+            Container(
+              margin: const EdgeInsets.only(top: 60.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    loadstatus ? Mystyle().showprogress() : showcontents(),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Card(
+                  margin: const EdgeInsets.only(top: 5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [textfieldsearch()],
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -101,22 +115,9 @@ class _MycustomerState extends State<Mycustomer> {
 
   Widget showcontents() {
     return status
-        ? showlistcontent()
+        ? showlistcustomer()
         : Mystyle().showinformation("មិនទាន់មានអតិថិជន...!");
   }
-
-  Widget showlistcontent() => Column(
-        children: [
-          Card(
-            margin: const EdgeInsets.only(top: 5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [textfieldsearch()],
-            ),
-          ),
-          showlistcustomer(),
-        ],
-      );
 
   Widget textfieldsearch() {
     return Container(
@@ -127,10 +128,9 @@ class _MycustomerState extends State<Mycustomer> {
       height: 50.0,
       width: MediaQuery.sizeOf(context).width * 0.95,
       child: TextField(
-        keyboardType: TextInputType.datetime,
         onChanged: (value) => updatelistcustomer(value),
         decoration: InputDecoration(
-          hintText: 'Searcheventdate',
+          hintText: 'Searchname',
           hintStyle: TextStyle(
             height: -0.5,
             color: Colors.blue.shade500,
@@ -271,8 +271,7 @@ class _MycustomerState extends State<Mycustomer> {
                     Mystyle().showtitle3(
                         "password: ${display_list[index].password}",
                         Colors.green.shade500),
-                         Mystyle().showtitle3(
-                        "phone: ${display_list[index].phone}",
+                    Mystyle().showtitle3("phone: ${display_list[index].phone}",
                         Colors.green.shade500),
                   ],
                 ),

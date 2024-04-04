@@ -32,7 +32,7 @@ Widget menusignin(BuildContext context) {
           backgroundColor: Color(Myconstant().iconcolor),
           child: const Icon(Icons.exit_to_app, size: 25.0, color: Colors.white),
         )),
-    title: Mystyle().showtitle1("SIGN IN", Color(Myconstant().iconcolor)),
+    title: Mystyle().showtitle1(" ចូលគណនី", Color(Myconstant().appbar)),
     hoverColor: Colors.red,
     onTap: () {
       Navigator.pop(context);
@@ -57,7 +57,7 @@ Widget menusignup(BuildContext context) {
             color: Colors.white,
           ),
         )),
-    title: Mystyle().showtitle1("SIGN UP", Color(Myconstant().iconcolor)),
+    title: Mystyle().showtitle1(" បង្កើតគណនី", Color(Myconstant().appbar)),
     hoverColor: Colors.black54,
     onTap: () {
       Navigator.pop(context);
@@ -89,11 +89,11 @@ Widget menulogout(BuildContext context) {
                 backgroundColor: Color(Myconstant().iconcolor),
                 child: const Icon(
                   Icons.output,
-                  size: 25.0,
+                  size: 35.0,
                   color: Colors.white,
                 ),
               )),
-          title: Mystyle().showtitle1("Exit", Color(Myconstant().iconcolor)),
+          title: Mystyle().showtitle1("ចាកចេញ", Colors.white),
           hoverColor: Colors.black54,
           onTap: () {
             Navigator.pop(context);
@@ -128,8 +128,8 @@ Widget boildlogo() {
       child: Column(
         children: [
           Container(
-            height: 130.0,
-            width: 130.0,
+            height: 120.0,
+            width: 120.0,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
@@ -142,7 +142,7 @@ Widget boildlogo() {
               backgroundImage: ExactAssetImage("images/logo.jpg"),
             ),
           ),
-          Mystyle().showtitle1("SABAY KOT", Color(Myconstant().iconcolor))
+          Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar))
         ],
       ),
     ),

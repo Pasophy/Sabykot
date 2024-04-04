@@ -68,7 +68,8 @@ class _MyusereventsState extends State<Myuserevents> {
             size: 45.0,
           ),
         ),
-        title: Mystyle().showtitle1("USER EVENT", Colors.white),
+        title: Container(margin: const EdgeInsets.only(left: 40.0),
+          child: Mystyle().showtitle1("អ្នកប្រើកម្មវិធី", Colors.white)),
       ),
       body: loadstatus ? Mystyle().showprogress() : showcontents(),
     );

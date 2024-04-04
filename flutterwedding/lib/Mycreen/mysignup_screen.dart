@@ -38,7 +38,7 @@ class _MysignupState extends State<Mysignup> {
         ),
         title: Container(
           margin: const EdgeInsets.only(left: 80.0),
-          child: Mystyle().showtitle1("SIGN UP", Colors.white),
+          child: Mystyle().showtitle1("បង្កើតគណនី", Colors.white),
         ),
       ),
       body: GestureDetector(
@@ -47,17 +47,15 @@ class _MysignupState extends State<Mysignup> {
         ),
         child: Center(
           child: Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [
+                  Colors.blue.shade50,
                   Colors.white,
-                  Colors.yellowAccent,
-                  Colors.amber,
-                  //Color(Myconstant().titlecolor),
-                  //Color(Myconstant().appbar)
+                  Colors.blue.shade300,
                 ],
-                center: Alignment(-0.02, -0.6),
-                radius: 1.2,
+                center: const Alignment(-0.02, -0.35),
+                radius: 0.9,
               ),
             ),
             child: Center(
@@ -66,7 +64,8 @@ class _MysignupState extends State<Mysignup> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     buildpicture(),
-                    Mystyle().showtitle1("SABAY KOT", Colors.red.shade700),
+                    Mystyle()
+                        .showtitle1("SABAY KOT", Color(Myconstant().appbar)),
                     textfieldname(),
                     textfieldusername(),
                     textfieldpassword(),
@@ -88,8 +87,7 @@ class _MysignupState extends State<Mysignup> {
   FilledButton buildcreatebuttom() {
     return FilledButton(
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStatePropertyAll(Color(Myconstant().buttomcolor)),
+        backgroundColor: MaterialStatePropertyAll(Color(Myconstant().appbar)),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
@@ -105,13 +103,13 @@ class _MysignupState extends State<Mysignup> {
             phone == "" ||
             address == null ||
             address == "") {
-          mydialog(context, 'pleasinputdata...!');
+          mydialog(context, 'សូមបញ្ចូលទិន្នន័យឱ្យគ្រប់...!');
         } else {
-        checkuseradmin();
+          checkuseradmin();
           //insertuser();
         }
       },
-      child: Mystyle().showtitle1("Create", Colors.white),
+      child: Mystyle().showtitle1("បង្កើត", Colors.white),
     );
   }
 
@@ -131,7 +129,7 @@ class _MysignupState extends State<Mysignup> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'error==>ok');
+      mydialog(context, 'no connection');
     }
   }
 
@@ -186,7 +184,6 @@ class _MysignupState extends State<Mysignup> {
             await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
         await Dio().post(urlphoto, data: formData).then((value) {
-          print("=====================>$value");
           urlpicture = "/projectsabaykot/PhotoAddim/$nameimage";
           insertadmin();
         });
@@ -247,34 +244,34 @@ class _MysignupState extends State<Mysignup> {
       child: TextField(
         onChanged: (value) => nameuser = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Fname:',
+          labelText: 'ឈ្មោះពេញ:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.perm_identity,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -295,34 +292,34 @@ class _MysignupState extends State<Mysignup> {
       child: TextField(
         onChanged: (value) => username = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Username:',
+          labelText: 'ឈ្មោះគណនី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.perm_identity,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -344,14 +341,14 @@ class _MysignupState extends State<Mysignup> {
         onChanged: (value) => password = value.toString(),
         obscureText: eyes,
         decoration: InputDecoration(
-          labelText: 'Password:',
+          labelText: 'លេខសម្ងាត់:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
-          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().reds)),
+          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().appbar)),
           suffixIcon: IconButton(
             icon: eyes
                 ? const Icon(Icons.remove_red_eye)
@@ -361,25 +358,25 @@ class _MysignupState extends State<Mysignup> {
                 eyes = !eyes;
               });
             },
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -401,34 +398,34 @@ class _MysignupState extends State<Mysignup> {
         keyboardType: TextInputType.phone,
         onChanged: (value) => phone = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Phone:',
+          labelText: 'លេខទូរស័ព្ទ:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.phone,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -450,34 +447,34 @@ class _MysignupState extends State<Mysignup> {
         maxLines: 3,
         onChanged: (value) => address = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Address:',
+          labelText: 'អាស័យដ្ឋាន:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.home,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,

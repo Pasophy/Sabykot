@@ -28,7 +28,6 @@ class _AddeventsState extends State<Addevents> {
   File? file;
   String? urlpicture;
   final TextEditingController eventdatecontroller = TextEditingController();
-  final TextEditingController expridatecontrollor = TextEditingController();
   final TextEditingController eventtimecontroller = TextEditingController();
   String? iduser, nameuser, eventname, eventdetail;
 
@@ -58,7 +57,7 @@ class _AddeventsState extends State<Addevents> {
         ),
         title: Container(
           margin: const EdgeInsets.only(left: 50.0),
-          child: Mystyle().showtitle1("ADD EVENTS", Colors.white),
+          child: Mystyle().showtitle1("បញ្ចូលឈ្មោះកម្មវិធី", Colors.white),
         ),
       ),
       body: GestureDetector(
@@ -68,14 +67,13 @@ class _AddeventsState extends State<Addevents> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 25.0),
               buildpicture(),
               const SizedBox(height: 10.0),
-              Mystyle().showtitle1("SABAY KOT", Colors.red.shade700),
+              Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
               buildeventsname(),
               buildcreatevntdate(),
               buildcreatevnttime(),
-              evntexpridatedate(),
               builddetailevents(),
               const SizedBox(height: 30.0),
               buildcreatebuttom(),
@@ -88,7 +86,7 @@ class _AddeventsState extends State<Addevents> {
 
   Future<void> insertevents() async {
     String url =
-        "${Myconstant().domain}/projectsabaykot/insertEvents.php?isAdd=true&iduser=$iduser&nameuser=$nameuser&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&expridate=${expridatecontrollor.text}&status=disable";
+        "${Myconstant().domain}/projectsabaykot/insertEvents.php?isAdd=true&iduser=$iduser&nameuser=$nameuser&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&status=disable";
     try {
       await Dio().get(url).then((value) {
         var result = json.decode(value.data); //chang unicode8
@@ -128,7 +126,8 @@ class _AddeventsState extends State<Addevents> {
         insertevents();
       } else {
         Map<String, dynamic> map = {};
-        map["file"] = await MultipartFile.fromFile(file!.path,filename: nameimage);
+        map["file"] =
+            await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
         Dio().post(urlimage, data: formData).then((value) {
           urlpicture = "/projectsabaykot/PhotoEvents/$nameimage";
@@ -187,34 +186,34 @@ class _AddeventsState extends State<Addevents> {
       child: TextField(
         onChanged: (value) => eventname = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventname:',
+          labelText: 'ឈ្មោះកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.event,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -236,34 +235,34 @@ class _AddeventsState extends State<Addevents> {
         maxLines: 5,
         onChanged: (value) => eventdetail = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventdetail:',
+          labelText: 'អធិប្បាយកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.details,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -286,10 +285,10 @@ class _AddeventsState extends State<Addevents> {
         controller: eventdatecontroller,
         //onChanged: (value) => eventdate = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventdate:',
+          labelText: 'ថ្ងៃទីកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
@@ -316,85 +315,20 @@ class _AddeventsState extends State<Addevents> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: Color(Myconstant().reds),
-              width: 1.0,
-            ),
-          ),
-        ),
-        style: TextStyle(
-          color: Color(Myconstant().reds),
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-          height: 1.0,
-        ),
-      ),
-    );
-  }
-
-  Widget evntexpridatedate() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white54,
-      ),
-      height: 50.0,
-      width: widths * 0.67,
-      child: TextField(
-        readOnly: true,
-        controller: expridatecontrollor,
-        decoration: InputDecoration(
-          labelText: 'Expridate:',
-          labelStyle: TextStyle(
-            height: -0.5,
-            color: Color(Myconstant().reds),
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-          prefixIcon: IconButton(
               color: Color(Myconstant().appbar),
-              onPressed: () async {
-                final DateTime? dateTime = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2023),
-                    lastDate: DateTime(2050).add(const Duration(days: 365)));
-                if (dateTime == null) {
-                  // ignore: use_build_context_synchronously
-                  mydialog(context, "សូមជ្រើសរើសថ្ងៃខែ...!");
-                } else {
-                  final formatdate =
-                      formatDate(dateTime, [dd, '-', mm, '-', yyyy]);
-                  setState(() {
-                    expridatecontrollor.text = formatdate.toString();
-                  });
-                }
-              },
-              icon: const Icon(Icons.date_range)),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: Color(Myconstant().reds),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -416,10 +350,10 @@ class _AddeventsState extends State<Addevents> {
         readOnly: true,
         controller: eventtimecontroller,
         decoration: InputDecoration(
-          labelText: 'Eventtime:',
+          labelText: 'ម៉ោងកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
@@ -443,20 +377,20 @@ class _AddeventsState extends State<Addevents> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -468,8 +402,7 @@ class _AddeventsState extends State<Addevents> {
   FilledButton buildcreatebuttom() {
     return FilledButton(
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStatePropertyAll(Colors.blue.shade700),
+        backgroundColor: MaterialStatePropertyAll(Color(Myconstant().appbar)),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
@@ -480,15 +413,14 @@ class _AddeventsState extends State<Addevents> {
             eventdetail == "" ||
             eventdetail == null ||
             eventdatecontroller.text.isEmpty ||
-            eventtimecontroller.text.isEmpty ||
-            expridatecontrollor.text.isEmpty) {
+            eventtimecontroller.text.isEmpty) {
           mydialog(context, "Insert fail");
         } else {
           uploadeventstoserver();
           print("$eventname,$eventdetail,${eventdatecontroller.value}");
         }
       },
-      child: Mystyle().showtitle1("Create", Colors.white),
+      child: Mystyle().showtitle1("បង្កើត", Colors.white),
     );
   }
 }

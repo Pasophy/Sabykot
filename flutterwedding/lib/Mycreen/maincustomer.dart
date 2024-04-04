@@ -9,7 +9,6 @@ import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
 import 'package:flutterwedding/Myutilities/opendrawer.dart';
 import 'package:flutterwedding/widget/event_customer.dart';
-import 'package:flutterwedding/widget/guest_events.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Maincustomer extends StatefulWidget {
@@ -26,6 +25,14 @@ class _MaincustomerState extends State<Maincustomer> {
   String? idevent, idcustomer, customeruser, customertype;
   Widget? currentwidget;
   SharedPreferences? preferences;
+  List<Widget> appbartitle = [
+    Container(
+        margin: const EdgeInsets.only(left: 30.0),
+        child: Mystyle().showtitle1("កម្មវិធីរបស់អ្នក", Colors.white)),
+    Container(
+        margin: const EdgeInsets.only(left: 30.0),
+        child: Mystyle().showtitle1("បញ្ជីឈ្មោះភ្ញៀវ", Colors.white))
+  ];
 
   @override
   void initState() {
@@ -53,7 +60,7 @@ class _MaincustomerState extends State<Maincustomer> {
           setState(() {
             customermodel = Customermodel.fromJson(map);
             idevent = customermodel!.idevent;
-           currentwidget = Customerevent(customermodel: customermodel!);
+            currentwidget = Customerevent(customermodel: customermodel!);
           });
         }
       }
@@ -69,10 +76,12 @@ class _MaincustomerState extends State<Maincustomer> {
       appBar: AppBar(
         backgroundColor: Color(Myconstant().appbar),
         leading: opendrawer(),
-        title: Mystyle().showtitle1("MAINCUSTOMER", Colors.white),
+        title: appbartitle[index],
       ),
-      drawer: drawermaincustomer(),
-      body: currentwidget,
+      drawer: customermodel == null
+          ? Mystyle().showprogress()
+          : drawermaincustomer(),
+      body: currentwidget ?? Mystyle().showprogress(),
     );
   }
 
@@ -104,7 +113,8 @@ class _MaincustomerState extends State<Maincustomer> {
             backgroundColor: Color(Myconstant().iconcolor),
             child: const Icon(Icons.event, size: 25.0, color: Colors.white),
           )),
-      title: Mystyle().showtitle2("  EVENTS", Color(Myconstant().iconcolor)),
+      title: Mystyle()
+          .showtitle2(" កម្មវិធីរបស់អ្នក", Color(Myconstant().iconcolor)),
       hoverColor: Colors.red,
       onTap: () {
         setState(() {
@@ -124,19 +134,20 @@ class _MaincustomerState extends State<Maincustomer> {
           child: CircleAvatar(
             backgroundColor: Color(Myconstant().iconcolor),
             child: const Icon(
-              Icons.event_available,
+              Icons.output,
               size: 25.0,
               color: Colors.white,
             ),
           )),
-      title: Mystyle().showtitle2(" GUESTS", Color(Myconstant().iconcolor)),
+      title: Mystyle()
+          .showtitle2(" ចាកចេញកម្មវិធី", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
-        setState(() {
-          index = 2;
-          currentwidget = const Guestevents();
-        });
-        Navigator.pop(context);
+        preferences!.clear();
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (context) => const Myhomecreen(),
+        );
+        Navigator.pushAndRemoveUntil(context, route, (route) => false);
       },
     );
   }
@@ -161,12 +172,11 @@ class _MaincustomerState extends State<Maincustomer> {
                   backgroundColor: Color(Myconstant().iconcolor),
                   child: const Icon(
                     Icons.output,
-                    size: 25.0,
+                    size: 30.0,
                     color: Colors.white,
                   ),
                 )),
-            title:
-                Mystyle().showtitle2("LOG OUT", Color(Myconstant().iconcolor)),
+            title: Mystyle().showtitle1("ចាកចេញ", Colors.white),
             hoverColor: Colors.black54,
             onTap: () {
               preferences!.clear();
@@ -201,8 +211,8 @@ class _MaincustomerState extends State<Maincustomer> {
         child: Column(
           children: [
             Container(
-              height: 130.0,
-              width: 130.0,
+              height: 120.0,
+              width: 120.0,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
@@ -211,11 +221,17 @@ class _MaincustomerState extends State<Maincustomer> {
                   width: 2.5,
                 ),
               ),
-              child: const CircleAvatar(
-                backgroundImage: ExactAssetImage("images/logo.jpg"),
-              ),
+              child: customermodel!.picture == null
+                  ? Mystyle().showprogress()
+                  : CircleAvatar(
+                      backgroundImage: NetworkImage(
+                          "${Myconstant().domain}${customermodel!.picture}"),
+                    ),
             ),
-            Mystyle().showtitle1("user", Color(Myconstant().iconcolor))
+            customermodel!.namecustomer == null
+                ? Mystyle().showprogress()
+                : Mystyle().showtitle1("${customermodel!.namecustomer}",
+                    Color(Myconstant().iconcolor))
           ],
         ),
       ),

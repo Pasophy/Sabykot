@@ -1,17 +1,22 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mycreen/addcustomer_screen.dart';
+import 'package:flutterwedding/Mycreen/editmyevent_screen.dart';
+import 'package:flutterwedding/Mycreen/myuser_eventsscreen.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
+import 'package:flutterwedding/Mycreen/showguest_your_event.dart';
 
 class Searchevent extends StatefulWidget {
   final Usermodel usermodel;
+  final String? eventdate;
   const Searchevent({
     Key? key,
     required this.usermodel,
+    this.eventdate,
   }) : super(key: key);
 
   @override
@@ -20,6 +25,7 @@ class Searchevent extends StatefulWidget {
 
 class _SearcheventState extends State<Searchevent> {
   late double widths, heights;
+  String? eventdate, iduser;
   Usermodel? usermodel;
   bool status = true;
   bool loadstatus = true;
@@ -32,13 +38,17 @@ class _SearcheventState extends State<Searchevent> {
     // TODO: implement initState
     super.initState();
     usermodel = widget.usermodel;
+    eventdate = widget.eventdate;
+    iduser = usermodel!.iduser;
+
     setState(() {
       getallevents();
     });
   }
 
   Future<void> getallevents() async {
-    String url = "${Myconstant().domain}/projectsabaykot/getAllDataevents.php";
+    String url =
+        "${Myconstant().domain}/projectsabaykot/getEventWhereIdadmin.php?isAdd=true&iduser=$iduser";
     Dio().get(url).then((value) {
       setState(() {
         loadstatus = false;
@@ -49,6 +59,13 @@ class _SearcheventState extends State<Searchevent> {
         for (var map in result) {
           Eventsmodel eventmodel = Eventsmodel.fromJson(map);
           setState(() {
+            // var date = eventmodel.expridate;
+            // DateTime d1 =
+            //     DateFormat('dd-MM-yyyy', 'en_US').parse(date.toString());
+            // DateTime d2 = DateTime.now();
+            // if (d1.isBefore(d2)) {
+
+            // }
             listeventmodel.add(eventmodel);
             display_list = List.from(listeventmodel);
           });
@@ -97,7 +114,7 @@ class _SearcheventState extends State<Searchevent> {
             Container(
               height: 90.0,
               width: double.infinity,
-              color: Colors.blue,
+              color: Color(Myconstant().appbar),
             ),
             Row(
               children: [
@@ -132,7 +149,8 @@ class _SearcheventState extends State<Searchevent> {
   Widget showcontent() {
     return status
         ? showlistcontent()
-        : Mystyle().showinformation("មិនទាន់មានកម្មវិធី...!");
+        : Container(margin:const EdgeInsets.only(top: 200.0) ,
+          child: Mystyle().showinformation("មិនទាន់មានកម្មវិធី...!"));
   }
 
   Widget showlistcontent() {
@@ -220,13 +238,20 @@ class _SearcheventState extends State<Searchevent> {
                         color: Colors.white,
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Addcustomer(
+                                usermodel: usermodel!,
+                                idevent: listeventmodel[index].idevent!),
+                          );
+                          Navigator.push(context, route);
+                        },
                         icon: const Icon(
                           Icons.group_add,
                         ),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("adduser", Colors.red)
+                  Mystyle().showtitle4("បញ្ចូលអ្នកប្រើ", Colors.red)
                 ],
               ),
               Column(
@@ -237,11 +262,40 @@ class _SearcheventState extends State<Searchevent> {
                         color: Colors.white,
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Myuserevents(
+                                idevent: listeventmodel[index].idevent!),
+                          );
+                          Navigator.push(context, route);
+                        },
+                        icon: const Icon(
+                          Icons.group,
+                        ),
+                        color: Color(Myconstant().appbar),
+                      )),
+                  Mystyle().showtitle4("បង្ហាញអ្នកប្រើ", Colors.red)
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Showyourguest(
+                                idevent: listeventmodel[index].idevent!),
+                          );
+                          Navigator.push(context, route);
+                        },
                         icon: const Icon(Icons.diversity_1),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("showguest", Colors.red)
+                  Mystyle().showtitle4("បង្ហាញភ្ញៀវ", Colors.red)
                 ],
               ),
               Column(
@@ -252,11 +306,20 @@ class _SearcheventState extends State<Searchevent> {
                         color: Colors.white,
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          MaterialPageRoute route = MaterialPageRoute(
+                            builder: (context) => Editmyevents(
+                                eventsmodel: listeventmodel, index: index),
+                          );
+                          Navigator.push(context, route).then((value) {
+                            listeventmodel.clear();
+                            getallevents();
+                          });
+                        },
                         icon: const Icon(Icons.edit),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("editevent", Colors.red)
+                  Mystyle().showtitle4("កែប្រែកម្មវិធី", Colors.red)
                 ],
               )
             ],

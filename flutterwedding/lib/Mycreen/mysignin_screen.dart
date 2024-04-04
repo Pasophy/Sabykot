@@ -42,8 +42,8 @@ class _MysigninState extends State<Mysignin> {
           ),
         ),
         title: Container(
-          margin: const EdgeInsets.only(left: 80.0),
-          child: Mystyle().showtitle1("SIGN IN", Colors.white),
+          margin: const EdgeInsets.only(left: 50.0),
+          child: Mystyle().showtitle1("ចូលគណនីរបស់អ្នក", Colors.white),
         ),
       ),
       body: GestureDetector(
@@ -52,17 +52,15 @@ class _MysigninState extends State<Mysignin> {
         ),
         child: Center(
           child: Container(
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               gradient: RadialGradient(
                 colors: [
-                  Colors.amber,
+                  Colors.blue.shade50,
                   Colors.white,
-                  Colors.yellow,
-                  //Color(Myconstant().titlecolor),
-                  //Color(Myconstant().appbar)
+                  Colors.blue.shade300,
                 ],
-                center: Alignment(-0.02, -0.5),
-                radius: 0.5,
+                center: const Alignment(-0.02, -0.2),
+                radius: 0.9,
               ),
             ),
             child: Center(
@@ -73,7 +71,7 @@ class _MysigninState extends State<Mysignin> {
                     const SizedBox(height: 30.0),
                     showmylogo(),
                     const SizedBox(height: 15.0),
-                    Mystyle().showtitle1("SABAY KOT", Colors.red.shade700),
+                    Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
                     textfieldusername(),
                     textfieldpassword(),
                     const SizedBox(height: 15.0),
@@ -93,14 +91,14 @@ class _MysigninState extends State<Mysignin> {
     return FilledButton(
       style: ButtonStyle(
           backgroundColor:
-              MaterialStatePropertyAll(Color(Myconstant().buttomcolor)),
+              MaterialStatePropertyAll(Color(Myconstant().appbar)),
           minimumSize: const MaterialStatePropertyAll(
             Size(200.0, 45.0),
           )),
       onPressed: () {
         checkuserlogin();
       },
-      child: Mystyle().showtitle1("Login", Colors.white),
+      child: Mystyle().showtitle1("ចូលគណនី", Colors.white),
     );
   }
 
@@ -210,34 +208,34 @@ class _MysigninState extends State<Mysignin> {
       child: TextField(
         onChanged: (value) => username = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Usename:',
+          labelText: 'ឈ្មោះគណនី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.perm_identity,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -259,14 +257,14 @@ class _MysigninState extends State<Mysignin> {
         onChanged: (value) => password = value.toString(),
         obscureText: eyes,
         decoration: InputDecoration(
-          labelText: 'Password:',
+          labelText: 'លេខសម្ងាត់:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
-          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().reds)),
+          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().appbar)),
           suffixIcon: IconButton(
             icon: eyes
                 ? const Icon(Icons.remove_red_eye)
@@ -276,25 +274,25 @@ class _MysigninState extends State<Mysignin> {
                 eyes = !eyes;
               });
             },
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,

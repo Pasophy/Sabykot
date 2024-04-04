@@ -31,7 +31,6 @@ class _EditmyeventsState extends State<Editmyevents> {
   String? oldurlpicture, urlpicture;
   File? file;
   final TextEditingController eventdatecontroller = TextEditingController();
-  final TextEditingController expridatecontrollor = TextEditingController();
   final TextEditingController eventtimecontroller = TextEditingController();
   String? idevent, eventname, eventdetail;
 
@@ -48,7 +47,6 @@ class _EditmyeventsState extends State<Editmyevents> {
     urlpicture = "${Myconstant().domain}${eventsmodels[index!].picture}";
     eventdatecontroller.text = eventsmodels[index!].eventdate!;
     eventtimecontroller.text = eventsmodels[index!].eventtime!;
-    expridatecontrollor.text = eventsmodels[index!].expridate!;
   }
 
   @override
@@ -66,7 +64,9 @@ class _EditmyeventsState extends State<Editmyevents> {
             size: 45.0,
           ),
         ),
-        title: Mystyle().showtitle1("EDIT EVENT", Colors.white),
+        title: Container(
+            margin: const EdgeInsets.only(left: 65.0),
+            child: Mystyle().showtitle1("កែប្រែកម្មវិធី", Colors.white)),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(
@@ -78,11 +78,10 @@ class _EditmyeventsState extends State<Editmyevents> {
               const SizedBox(height: 10.0),
               buildpicture(),
               const SizedBox(height: 10.0),
-              Mystyle().showtitle1("SABAY KOT", Colors.red.shade700),
+              Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
               buildeventsname(),
               buildcreatevntdate(),
               buildcreatevnttime(),
-              evntexpridatedate(),
               builddetailevents(),
               const SizedBox(height: 30.0),
               buildeditbuttom(),
@@ -95,7 +94,7 @@ class _EditmyeventsState extends State<Editmyevents> {
 
   Future<void> updatevents() async {
     String url =
-        "${Myconstant().domain}/projectsabaykot/EditEventsWhereid.php?isAdd=true&idevent=$idevent&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&expridate=${expridatecontrollor.text}&status=disable";
+        "${Myconstant().domain}/projectsabaykot/EditEventsWhereid.php?isAdd=true&idevent=$idevent&eventname=$eventname&picture=$urlpicture&eventdetail=$eventdetail&eventdate=${eventdatecontroller.text}&eventtime=${eventtimecontroller.text}&status=disable";
     try {
       await Dio().get(url).then((value) {
         var result = json.decode(value.data); //chang unicode8
@@ -196,34 +195,34 @@ class _EditmyeventsState extends State<Editmyevents> {
         initialValue: eventname,
         onChanged: (value) => eventname = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventname:',
+          labelText: 'ឈ្មោះកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.event,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -246,34 +245,34 @@ class _EditmyeventsState extends State<Editmyevents> {
         initialValue: eventdetail,
         onChanged: (value) => eventdetail = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventdetail:',
+          labelText: 'អធិប្បាយកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.details,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -296,10 +295,10 @@ class _EditmyeventsState extends State<Editmyevents> {
         controller: eventdatecontroller,
         //onChanged: (value) => eventdate = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Eventdate:',
+          labelText: 'ថ្ងៃទីកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
@@ -326,85 +325,20 @@ class _EditmyeventsState extends State<Editmyevents> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: Color(Myconstant().reds),
-              width: 1.0,
-            ),
-          ),
-        ),
-        style: TextStyle(
-          color: Color(Myconstant().reds),
-          fontSize: 18.0,
-          fontWeight: FontWeight.bold,
-          height: 1.0,
-        ),
-      ),
-    );
-  }
-
-  Widget evntexpridatedate() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.white54,
-      ),
-      height: 50.0,
-      width: widths * 0.67,
-      child: TextField(
-        readOnly: true,
-        controller: expridatecontrollor,
-        decoration: InputDecoration(
-          labelText: 'Expridate:',
-          labelStyle: TextStyle(
-            height: -0.5,
-            color: Color(Myconstant().reds),
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-          ),
-          prefixIcon: IconButton(
               color: Color(Myconstant().appbar),
-              onPressed: () async {
-                final DateTime? dateTime = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(2023),
-                    lastDate: DateTime(2050).add(const Duration(days: 365)));
-                if (dateTime == null) {
-                  // ignore: use_build_context_synchronously
-                  mydialog(context, "សូមជ្រើសរើសថ្ងៃខែ...!");
-                } else {
-                  final formatdate =
-                      formatDate(dateTime, [dd, '-', mm, '-', yyyy]);
-                  setState(() {
-                    expridatecontrollor.text = formatdate.toString();
-                  });
-                }
-              },
-              icon: const Icon(Icons.date_range)),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: Color(Myconstant().reds),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -426,10 +360,10 @@ class _EditmyeventsState extends State<Editmyevents> {
         readOnly: true,
         controller: eventtimecontroller,
         decoration: InputDecoration(
-          labelText: 'Eventtime:',
+          labelText: 'ម៉ោងកម្មវិធី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
@@ -453,20 +387,20 @@ class _EditmyeventsState extends State<Editmyevents> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -478,7 +412,7 @@ class _EditmyeventsState extends State<Editmyevents> {
   FilledButton buildeditbuttom() {
     return FilledButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
+        backgroundColor: MaterialStatePropertyAll(Color(Myconstant().appbar)),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
@@ -489,15 +423,13 @@ class _EditmyeventsState extends State<Editmyevents> {
             eventdetail == "" ||
             eventdetail == null ||
             eventdatecontroller.text.isEmpty ||
-            eventtimecontroller.text.isEmpty ||
-            expridatecontrollor.text.isEmpty) {
+            eventtimecontroller.text.isEmpty) {
           mydialog(context, "Insert fail");
         } else {
           uploadeventstoserver();
-          print("$eventname,$eventdetail,${eventdatecontroller.value}");
         }
       },
-      child: Mystyle().showtitle1("Edit", Colors.white),
+      child: Mystyle().showtitle1("កែប្រែ", Colors.white),
     );
   }
 }

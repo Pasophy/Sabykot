@@ -66,7 +66,7 @@ class _AddcustomerState extends State<Addcustomer> {
         ),
         title: Container(
           margin: const EdgeInsets.only(left: 50.0),
-          child: Mystyle().showtitle1("ADD CUSTOMER", Colors.white),
+          child: Mystyle().showtitle1("បង្កើតបញ្ជីអ្នកប្រើ", Colors.white),
         ),
       ),
       body: GestureDetector(
@@ -77,7 +77,7 @@ class _AddcustomerState extends State<Addcustomer> {
           child: Column(
             children: [
               buildpicture(),
-              Mystyle().showtitle1("SABAY KOT", Colors.red.shade700),
+              Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
               customername(),
               customerusername(),
               passwordcustomer(),
@@ -98,13 +98,13 @@ class _AddcustomerState extends State<Addcustomer> {
     return FilledButton(
       style: ButtonStyle(
         backgroundColor:
-            MaterialStatePropertyAll(Color(Myconstant().buttomcolor)),
+            MaterialStatePropertyAll(Color(Myconstant().appbar)),
         minimumSize: const MaterialStatePropertyAll(
           Size(200.0, 45.0),
         ),
       ),
       onPressed: () {
-        print("iduser==>$iduser====idevent===>$idevent");
+       
         if (namecustomer == null ||
             namecustomer == "" ||
             usercustomer == null ||
@@ -120,7 +120,7 @@ class _AddcustomerState extends State<Addcustomer> {
           uploadphototoserver();
         }
       },
-      child: Mystyle().showtitle1("Create", Colors.white),
+      child: Mystyle().showtitle1("បង្កើត", Colors.white),
     );
   }
 
@@ -140,7 +140,7 @@ class _AddcustomerState extends State<Addcustomer> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'error==>ok');
+      mydialog(context, 'no connection');
     }
   }
 
@@ -266,34 +266,34 @@ class _AddcustomerState extends State<Addcustomer> {
       child: TextField(
         onChanged: (value) => namecustomer = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Fname:',
+          labelText: 'ឈ្មោះពេញ:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.perm_identity,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -314,34 +314,34 @@ class _AddcustomerState extends State<Addcustomer> {
       child: TextField(
         onChanged: (value) => usercustomer = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Username:',
+          labelText: 'ឈ្មោះគណនី:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.perm_identity,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -363,14 +363,14 @@ class _AddcustomerState extends State<Addcustomer> {
         onChanged: (value) => password = value.toString(),
         obscureText: eyes,
         decoration: InputDecoration(
-          labelText: 'Password:',
+          labelText: 'លេខសម្ងាត់:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
-          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().reds)),
+          prefixIcon: Icon(Icons.lock_open, color: Color(Myconstant().appbar)),
           suffixIcon: IconButton(
             icon: eyes
                 ? const Icon(Icons.remove_red_eye)
@@ -380,25 +380,25 @@ class _AddcustomerState extends State<Addcustomer> {
                 eyes = !eyes;
               });
             },
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -420,34 +420,34 @@ class _AddcustomerState extends State<Addcustomer> {
         keyboardType: TextInputType.phone,
         onChanged: (value) => phone = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Phone:',
+          labelText: 'លេខទូរស័ព្ទ:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.phone,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
@@ -469,34 +469,34 @@ class _AddcustomerState extends State<Addcustomer> {
         maxLines: 3,
         onChanged: (value) => address = value.toString(),
         decoration: InputDecoration(
-          labelText: 'Address:',
+          labelText: 'អាស័យដ្ឋាន:',
           labelStyle: TextStyle(
             height: -0.5,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
           ),
           prefixIcon: Icon(
             Icons.home,
-            color: Color(Myconstant().reds),
+            color: Color(Myconstant().appbar),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: Color(Myconstant().reds),
+              color: Color(Myconstant().appbar),
               width: 1.0,
             ),
           ),
         ),
         style: TextStyle(
-          color: Color(Myconstant().reds),
+          color: Color(Myconstant().appbar),
           fontSize: 18.0,
           fontWeight: FontWeight.bold,
           height: 1.0,
