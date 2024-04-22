@@ -103,15 +103,18 @@ class _AddeventsState extends State<Addevents> {
   }
 
   Future<void> chooseimageevents(ImageSource imageSource) async {
-    var object = await ImagePicker().pickImage(
-      source: imageSource,
-      maxHeight: 800.0,
-      maxWidth: 700.0,
-    );
+    try {
 
-    setState(() {
-      file = File(object!.path);
-    });
+      var object = await ImagePicker().pickImage(
+        source: imageSource,
+        maxHeight: 800.0,
+        maxWidth: 700.0,
+      );
+
+      setState(() {
+        file = File(object!.path);
+      });
+    } catch (e) {}
   }
 
   Future<void> uploadeventstoserver() async {
@@ -417,7 +420,7 @@ class _AddeventsState extends State<Addevents> {
           mydialog(context, "Insert fail");
         } else {
           uploadeventstoserver();
-          print("$eventname,$eventdetail,${eventdatecontroller.value}");
+          
         }
       },
       child: Mystyle().showtitle1("បង្កើត", Colors.white),
