@@ -17,7 +17,7 @@ class Editmyevents extends StatefulWidget {
   const Editmyevents({
     Key? key,
     required this.eventsmodel,
-    this.index = 0,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -38,15 +38,17 @@ class _EditmyeventsState extends State<Editmyevents> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    eventsmodels = widget.eventsmodel;
-    index = widget.index;
-    idevent = eventsmodels[index!].idevent;
-    eventname = eventsmodels[index!].eventname;
-    eventdetail = eventsmodels[index!].eventdetail;
-    oldurlpicture = eventsmodels[index!].picture;
-    urlpicture = "${Myconstant().domain}${eventsmodels[index!].picture}";
-    eventdatecontroller.text = eventsmodels[index!].eventdate!;
-    eventtimecontroller.text = eventsmodels[index!].eventtime!;
+    setState(() {
+      eventsmodels = widget.eventsmodel;
+      index = widget.index;
+      idevent = eventsmodels[index!].idevent;
+      eventname = eventsmodels[index!].eventname;
+      eventdetail = eventsmodels[index!].eventdetail;
+      oldurlpicture = eventsmodels[index!].picture;
+      urlpicture = "${Myconstant().domain}${eventsmodels[index!].picture}";
+      eventdatecontroller.text = eventsmodels[index!].eventdate!;
+      eventtimecontroller.text = eventsmodels[index!].eventtime!;
+    });
   }
 
   @override
@@ -68,27 +70,28 @@ class _EditmyeventsState extends State<Editmyevents> {
             margin: const EdgeInsets.only(left: 65.0),
             child: Mystyle().showtitle1("កែប្រែកម្មវិធី", Colors.white)),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).requestFocus(
-          FocusNode(),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 10.0),
-              buildpicture(),
-              const SizedBox(height: 10.0),
-              Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
-              buildeventsname(),
-              buildcreatevntdate(),
-              buildcreatevnttime(),
-              builddetailevents(),
-              const SizedBox(height: 30.0),
-              buildeditbuttom(),
-            ],
-          ),
-        ),
-      ),
+      body: index==null?Mystyle().showprogress(): GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(
+                FocusNode(),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10.0),
+                    buildpicture(),
+                    const SizedBox(height: 10.0),
+                    Mystyle()
+                        .showtitle1("SABAY KOT", Color(Myconstant().appbar)),
+                    buildeventsname(),
+                    buildcreatevntdate(),
+                    buildcreatevnttime(),
+                    builddetailevents(),
+                    const SizedBox(height: 30.0),
+                    buildeditbuttom(),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 
@@ -124,10 +127,10 @@ class _EditmyeventsState extends State<Editmyevents> {
 
   Future<void> uploadeventstoserver() async {
     Random random = Random();
-    int i = random.nextInt(10000000);
+    int i = random.nextInt(100000000);
     String nameimage = "event$i.jpg";
     String urlimage =
-        "${Myconstant().domain}/projectsabaykot/uploadPhotoeventsToserver.php";
+        "${Myconstant().domain}/projectsabaykot/uploadPhotoEventsToserver.php";
     try {
       if (file == null) {
         urlpicture = "$oldurlpicture";
@@ -137,7 +140,7 @@ class _EditmyeventsState extends State<Editmyevents> {
         map["file"] =
             await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
-        Dio().post(urlimage, data: formData).then((value) {
+       await Dio().post(urlimage, data: formData).then((value) {
           urlpicture = "/projectsabaykot/PhotoEvents/$nameimage";
           updatevents();
         });

@@ -131,7 +131,7 @@ class _MysigninState extends State<Mysignin> {
           }
         } catch (e) {
           // ignore: use_build_context_synchronously
-          mydialog(context, 'customer error==>ok');
+          mydialog(context, 'no internet');
         }
       } else {
         for (var map in result) {
@@ -147,7 +147,7 @@ class _MysigninState extends State<Mysignin> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'user error==>ok');
+      mydialog(context, 'no internet');
     }
   }
 

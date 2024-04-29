@@ -104,7 +104,6 @@ class _AddeventsState extends State<Addevents> {
 
   Future<void> chooseimageevents(ImageSource imageSource) async {
     try {
-
       var object = await ImagePicker().pickImage(
         source: imageSource,
         maxHeight: 800.0,
@@ -119,10 +118,10 @@ class _AddeventsState extends State<Addevents> {
 
   Future<void> uploadeventstoserver() async {
     Random random = Random();
-    int i = random.nextInt(10000000);
+    int i = random.nextInt(100000000);
     String nameimage = "event$i.jpg";
     String urlimage =
-        "${Myconstant().domain}/projectsabaykot/uploadPhotoeventsToserver.php";
+        "${Myconstant().domain}/projectsabaykot/uploadPhotoEventsToserver.php";
     try {
       if (file == null) {
         urlpicture = "/projectsabaykot/PhotoEvents/logo.jpg";
@@ -132,7 +131,7 @@ class _AddeventsState extends State<Addevents> {
         map["file"] =
             await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
-        Dio().post(urlimage, data: formData).then((value) {
+        await Dio().post(urlimage, data: formData).then((value) {
           urlpicture = "/projectsabaykot/PhotoEvents/$nameimage";
           insertevents();
         });
@@ -420,7 +419,6 @@ class _AddeventsState extends State<Addevents> {
           mydialog(context, "Insert fail");
         } else {
           uploadeventstoserver();
-          
         }
       },
       child: Mystyle().showtitle1("បង្កើត", Colors.white),

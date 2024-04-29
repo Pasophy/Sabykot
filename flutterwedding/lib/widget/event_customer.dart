@@ -161,7 +161,7 @@ class _CustomereventState extends State<Customerevent> {
                       child: IconButton(
                         onPressed: () {
                           MaterialPageRoute route = MaterialPageRoute(
-                            builder: (context) => Gusetcustadd(idcustomer: idcustomer),
+                            builder: (context) => Gusetcustadd(idcustomer: idcustomer!,ideven: idevent!,),
                           );
                           Navigator.push(context, route);
                         },

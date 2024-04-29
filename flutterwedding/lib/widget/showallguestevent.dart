@@ -64,6 +64,8 @@ class _ShowallguesteventState extends State<Showallguestevent> {
         });
         var result = json.decode(value.data);
         if (result.toString() != 'null') {
+          totalamountdolla = 0;
+          totalamountkh = 0;
           for (var map in result) {
             Guestmodel guestmodel = Guestmodel.fromJson(map);
             setState(() {
@@ -201,7 +203,7 @@ class _ShowallguesteventState extends State<Showallguestevent> {
                 onPressed: () {
                   MaterialPageRoute route = MaterialPageRoute(
                     builder: (context) =>
-                        Addyourguest(idvent: idevent, idcustomer: "007"),
+                        Addyourguest(idvent: idevent!, idcustomer: "007"),
                   );
                   Navigator.push(context, route).then(
                     (value) {
@@ -354,7 +356,11 @@ class _ShowallguesteventState extends State<Showallguestevent> {
                         getguestwhereidevent();
                       });
                     },
-                    icon: Icon(Icons.edit,color: Color(Myconstant().appbar),size: 20.0,),
+                    icon: Icon(
+                      Icons.edit,
+                      color: Color(Myconstant().appbar),
+                      size: 20.0,
+                    ),
                   ),
                 ),
               ],

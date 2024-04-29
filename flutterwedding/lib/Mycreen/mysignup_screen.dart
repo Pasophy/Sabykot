@@ -149,7 +149,7 @@ class _MysignupState extends State<Mysignup> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, "error==>$e");
+      mydialog(context, "no internet");
     }
   }
 
@@ -173,7 +173,6 @@ class _MysignupState extends State<Mysignup> {
 
     String urlphoto =
         "${Myconstant().domain}/projectsabaykot/uploadPhotoToserver.php";
-
     try {
       if (file == null) {
         urlpicture = "/projectsabaykot/PhotoAddim/logo.jpg";

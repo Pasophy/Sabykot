@@ -1,21 +1,24 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mycreen/addguest_sceen.dart';
 import 'package:flutterwedding/Mycreen/editguest_screen.dart';
 import 'package:flutterwedding/Mycreen/pdf_api.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mymodel/guestmodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
-import 'package:flutterwedding/Mycreen/addguest_sceen.dart';
 import 'package:intl/intl.dart';
 
 class Gusetcustadd extends StatefulWidget {
-  final String? idcustomer;
+  final String idcustomer;
+  final String ideven;
   const Gusetcustadd({
     Key? key,
-    this.idcustomer,
+    required this.idcustomer,
+    required this.ideven,
   }) : super(key: key);
 
   @override
@@ -41,6 +44,7 @@ class _GusetcustaddState extends State<Gusetcustadd> {
     //finduser();
     setState(() {
       idcustomers = widget.idcustomer;
+      idevent = widget.ideven;
       getguestwhereidcus();
     });
   }
@@ -64,13 +68,15 @@ class _GusetcustaddState extends State<Gusetcustadd> {
         });
         var result = json.decode(value.data);
         if (result.toString() != 'null') {
+          totalamountdolla = 0;
+          totalamountkh = 0;
           for (var map in result) {
             guestmodel = Guestmodel.fromJson(map);
             setState(() {
               listguest.add(guestmodel!);
               displaylist = List.from(listguest);
               count++;
-              idevent = guestmodel!.idevent;
+              //idevent = guestmodel!.idevent;
               if (guestmodel!.currency == "ដុល្លារ") {
                 totalamountdolla += int.parse(guestmodel!.amount.toString());
               } else {
@@ -202,13 +208,15 @@ class _GusetcustaddState extends State<Gusetcustadd> {
               FloatingActionButton(
                 onPressed: () {
                   MaterialPageRoute route = MaterialPageRoute(
-                    builder: (context) =>
-                        Addyourguest(idvent: idevent, idcustomer: idcustomers),
+                    builder: (context) => Addyourguest(
+                        idvent: idevent!, idcustomer: idcustomers!),
                   );
                   Navigator.push(context, route).then(
                     (value) {
-                      listguest.clear();
-                      getguestwhereidcus();
+                      setState(() {
+                        listguest.clear();
+                        getguestwhereidcus();
+                      });
                     },
                   );
                 },
@@ -355,7 +363,11 @@ class _GusetcustaddState extends State<Gusetcustadd> {
                         getguestwhereidcus();
                       });
                     },
-                    icon: Icon(Icons.edit, color: Color(Myconstant().appbar),size: 20.0,),
+                    icon: Icon(
+                      Icons.edit,
+                      color: Color(Myconstant().appbar),
+                      size: 20.0,
+                    ),
                   ),
                 ),
               ],

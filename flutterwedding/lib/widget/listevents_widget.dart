@@ -88,6 +88,7 @@ class _MyeventsState extends State<Myevents> {
               ? Mystyle().showprogress()
               : SingleChildScrollView(
                   child: Column(
+                   
                     children: [
                       showcontent(),
                       const SizedBox(
@@ -105,7 +106,10 @@ class _MyeventsState extends State<Myevents> {
   Widget showcontent() {
     return status
         ? showlistcontent()
-        : Mystyle().showinformation("មិនទាន់មានកម្មវិធី...!");
+        : Container(
+          margin: const EdgeInsets.only(top: 250.0),
+            child: Mystyle().showinformation("មិនទាន់មានកម្មវិធី...!"),
+          );
   }
 
   Widget showlistcontent() {
@@ -264,8 +268,10 @@ class _MyeventsState extends State<Myevents> {
                                 eventsmodel: listeventmodel, index: index),
                           );
                           Navigator.push(context, route).then((value) {
-                            listeventmodel.clear();
-                            getallevents();
+                            setState(() {
+                              listeventmodel.clear();
+                              getallevents();
+                            });
                           });
                         },
                         icon: const Icon(Icons.edit),

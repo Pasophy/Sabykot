@@ -5,12 +5,12 @@ import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
 
 class Addyourguest extends StatefulWidget {
-  final String? idvent;
-  final String? idcustomer;
+  final String idvent;
+  final String idcustomer;
   const Addyourguest({
     Key? key,
-    this.idvent,
-    this.idcustomer,
+    required this.idvent,
+    required this.idcustomer,
   }) : super(key: key);
 
   @override
@@ -35,8 +35,10 @@ class _AddyourguestState extends State<Addyourguest> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    idevents = widget.idvent;
-    idcustomers = widget.idcustomer;
+    setState(() {
+      idevents = widget.idvent;
+      idcustomers = widget.idcustomer;
+    });
   }
 
   @override

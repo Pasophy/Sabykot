@@ -189,8 +189,7 @@ class _AddcustomerState extends State<Addcustomer> {
         map["file"] =
             await MultipartFile.fromFile(file!.path, filename: nameimage);
         FormData formData = FormData.fromMap(map);
-
-        Dio().post(urlimage, data: formData).then((value) {
+       await Dio().post(urlimage, data: formData).then((value) {
           urlpicture = "/projectsabaykot/PhotoCustomer/$nameimage";
           insertcustomer();
         });

@@ -77,6 +77,7 @@ class _MycustomerState extends State<Mycustomer> {
       });
     } catch (e) {}
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -116,7 +117,10 @@ class _MycustomerState extends State<Mycustomer> {
   Widget showcontents() {
     return status
         ? showlistcustomer()
-        : Mystyle().showinformation("មិនទាន់មានអតិថិជន...!");
+        : Container(
+          margin: const EdgeInsets.only(top: 250.0),
+            child: Mystyle().showinformation("មិនទាន់មានអ្នកប្រើ...!"),
+          );
   }
 
   Widget textfieldsearch() {

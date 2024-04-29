@@ -253,8 +253,8 @@ class _MymainusersState extends State<Mymainusers> {
           children: [
             Container(
               margin: const EdgeInsets.all(8.0),
-              width: widths * 0.35,
-              height: widths * 0.3,
+              width: 120,
+              height: 120,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
