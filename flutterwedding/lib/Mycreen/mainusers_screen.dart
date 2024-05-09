@@ -32,7 +32,7 @@ class _MymainusersState extends State<Mymainusers> {
   List<Widget> listwidget = [
     Mystyle().showtitle1("កម្មវិធីរបស់ខ្ញុំ", Colors.white),
     Mystyle().showtitle1("អ្នកប្រើកម្មវីធី", Colors.white),
-    Mystyle().showtitle1("កម្មវិធីផុតកំណត់", Colors.white),
+    Mystyle().showtitle1("បញ្ជីឈ្មោះភ្ញៀវ", Colors.white),
     textfieldsearch(),
   ];
 
@@ -123,6 +123,7 @@ class _MymainusersState extends State<Mymainusers> {
               const SizedBox(height: 15.0),
               menuevents(),
               menucustomer(),
+              menuwriteguest()
              
             ],
           ),
@@ -177,6 +178,42 @@ class _MymainusersState extends State<Mymainusers> {
         setState(() {
           showseach = false;
           index = 1;
+          nameuser != null
+              ? currentwidget = Mycustomer(
+                  usertype: usertype!,
+                  iduser: iduser,
+                  nameuser: nameuser,
+                )
+              : currentwidget = Mycustomer(
+                  usertype: customertype!,
+                  iduser: idcustomer,
+                  nameuser: usercustomer);
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  Widget menuwriteguest() {
+    return ListTile(
+      leading: SizedBox(
+          height: 40.0,
+          width: 40.0,
+          child: CircleAvatar(
+            backgroundColor: Color(Myconstant().iconcolor),
+            child: const Icon(
+              Icons.edit_square,
+              size: 22.0,
+              color: Colors.white,
+            ),
+          )),
+      title: Mystyle()
+          .showtitle2(" កត់ត្រាភ្ញៀវ", Color(Myconstant().iconcolor)),
+      hoverColor: Colors.black54,
+      onTap: () {
+        setState(() {
+          showseach = false;
+          index = 2;
           nameuser != null
               ? currentwidget = Mycustomer(
                   usertype: usertype!,

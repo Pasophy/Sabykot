@@ -154,7 +154,7 @@ class _ShoyourguestState extends State<Showyourguest> {
           children: [
             SingleChildScrollView(
               child: Container(
-                margin: const EdgeInsets.only(top: 115.0,bottom: 100.0),
+                margin: const EdgeInsets.only(top: 115.0, bottom: 100.0),
                 child: Column(
                   children: [
                     loadstatus ? Mystyle().showprogress() : showcontents(),
@@ -316,13 +316,15 @@ class _ShoyourguestState extends State<Showyourguest> {
                             Editmyguest(listguest: listguest, index: index),
                       );
                       Navigator.push(context, route).then((value) {
+                        status = true;
                         listguest.clear();
                         getguestwhereidevent();
                       });
                     },
                     icon: Icon(
                       Icons.edit,
-                      color: Color(Myconstant().appbar),size: 20.0,
+                      color: Color(Myconstant().appbar),
+                      size: 20.0,
                     ),
                   ),
                 ),

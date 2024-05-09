@@ -88,7 +88,6 @@ class _MyeventsState extends State<Myevents> {
               ? Mystyle().showprogress()
               : SingleChildScrollView(
                   child: Column(
-                   
                     children: [
                       showcontent(),
                       const SizedBox(
@@ -107,7 +106,7 @@ class _MyeventsState extends State<Myevents> {
     return status
         ? showlistcontent()
         : Container(
-          margin: const EdgeInsets.only(top: 250.0),
+            margin: const EdgeInsets.only(top: 250.0),
             child: Mystyle().showinformation("មិនទាន់មានកម្មវិធី...!"),
           );
   }
@@ -154,29 +153,86 @@ class _MyeventsState extends State<Myevents> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Mystyle()
-                          .showtitle3("កម្មវិធី:", Color(Myconstant().appbar)),
-                      Mystyle().showtitle4(
-                          "${listeventmodel[index].eventname}", Colors.red),
+                      Text(
+                        "កម្មវិធី",
+                        style: TextStyle(
+                            fontSize: widths * 0.04,
+                            color: Color(Myconstant().appbar),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
+                      // Mystyle()
+                      //     .showtitle3("កម្មវិធី:", Color(Myconstant().appbar)),
+                      Text(
+                        "${listeventmodel[index].eventname}",
+                        style: TextStyle(
+                            fontSize: widths * 0.03,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
+                      // Mystyle().showtitle4(
+                      //     "${listeventmodel[index].eventname}", Colors.red),
                       Row(
                         children: [
-                          Mystyle().showtitle3(
-                              "ថ្ងៃទី:", Color(Myconstant().appbar)),
-                          Mystyle().showtitle4(
-                              "${listeventmodel[index].eventdate}", Colors.red),
+                          Text(
+                            " ថ្ងៃទី:",
+                            style: TextStyle(
+                                fontSize: widths * 0.04,
+                                color: Color(Myconstant().appbar),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle3(
+                          //     "ថ្ងៃទី:", Color(Myconstant().appbar)),
+                          Text(
+                            " ${listeventmodel[index].eventdate}",
+                            style: TextStyle(
+                                fontSize: widths * 0.03,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle4(
+                          //     "${listeventmodel[index].eventdate}", Colors.red),
                         ],
                       ),
                       Row(
                         children: [
-                          Mystyle()
-                              .showtitle3("​ម៉ោង:", Color(Myconstant().appbar)),
-                          Mystyle().showtitle4(
-                              "${listeventmodel[index].eventtime}", Colors.red),
+                          Text(
+                            " ម៉ោង:",
+                            style: TextStyle(
+                                fontSize: widths * 0.04,
+                                color: Color(Myconstant().appbar),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle()
+                          //     .showtitle3("​ម៉ោង:", Color(Myconstant().appbar)),
+                          Text(
+                            " ${listeventmodel[index].eventtime}",
+                            style: TextStyle(
+                                fontSize: widths * 0.03,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle4(
+                          //     "${listeventmodel[index].eventtime}", Colors.red),
                         ],
                       ),
-                      Mystyle().showtitle4(
-                          "detail: ${listeventmodel[index].eventdetail}",
-                          Colors.blue),
+
+                      Text(
+                        "detail: ${listeventmodel[index].eventdetail}",
+                        style: TextStyle(
+                            fontSize: widths * 0.025,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
+                      // Mystyle().showtitle4(
+                      //     "detail: ${listeventmodel[index].eventdetail}",
+                      //     Colors.blue),
                     ],
                   ),
                 ),
@@ -289,7 +345,6 @@ class _MyeventsState extends State<Myevents> {
       ),
     );
   }
-
   Widget buttomaddevents() {
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0, right: 10.0),
@@ -305,9 +360,12 @@ class _MyeventsState extends State<Myevents> {
                     builder: (context) => Addevents(usermodel: usermodel!),
                   );
                   Navigator.push(context, route).then(
-                    (value) {
-                      listeventmodel.clear();
-                      getallevents();
+                    (value){
+                      setState(() {
+                        status = true;
+                        listeventmodel.clear();
+                        getallevents();
+                      });
                     },
                   );
                 },

@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
+import 'package:flutterwedding/Mycreen/mainusers_screen.dart';
+import 'package:flutterwedding/Mymodel/usermodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
 import 'package:flutterwedding/Myutilities/mydialog.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +18,7 @@ class Mysignup extends StatefulWidget {
 }
 
 class _MysignupState extends State<Mysignup> {
+  Usermodel? usermodel;
   late double widths, heights;
   bool eyes = true;
   String? nameuser, username, password, phone, address, urlpicture;
@@ -142,7 +145,11 @@ class _MysignupState extends State<Mysignup> {
       var result = json.decode(response.data); //chang unicode8
       if (result.toString() == 'true') {
         // ignore: use_build_context_synchronously
-        Navigator.pop(context);
+        //Navigator.pop(context);
+        MaterialPageRoute route =
+            MaterialPageRoute(builder: (context) => const Mymainusers());
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(context, route, (route) => false);
       } else {
         // ignore: use_build_context_synchronously
         mydialog(context, 'insert user fail');

@@ -198,29 +198,83 @@ class _SearcheventState extends State<Searchevent> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Mystyle()
-                          .showtitle4("កម្មវិធី:", Color(Myconstant().appbar)),
-                      Mystyle().showtitle4(
-                          "${display_list[index].eventname}", Colors.red),
+                       Text(
+                        "កម្មវិធី",
+                        style: TextStyle(
+                            fontSize: widths * 0.04,
+                            color: Color(Myconstant().appbar),
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
+                      // Mystyle()
+                      //     .showtitle3("កម្មវិធី:", Color(Myconstant().appbar)),
+                      Text(
+                        "${listeventmodel[index].eventname}",
+                        style: TextStyle(
+                            fontSize: widths * 0.03,
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
+                      // Mystyle().showtitle4(
+                      //     "${listeventmodel[index].eventname}", Colors.red),
                       Row(
                         children: [
-                          Mystyle().showtitle4(
-                              "ថ្ងៃទី:", Color(Myconstant().appbar)),
-                          Mystyle().showtitle4(
-                              "${display_list[index].eventdate}", Colors.red),
+                          Text(
+                            " ថ្ងៃទី:",
+                            style: TextStyle(
+                                fontSize: widths * 0.04,
+                                color: Color(Myconstant().appbar),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle3(
+                          //     "ថ្ងៃទី:", Color(Myconstant().appbar)),
+                          Text(
+                            " ${listeventmodel[index].eventdate}",
+                            style: TextStyle(
+                                fontSize: widths * 0.03,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle4(
+                          //     "${listeventmodel[index].eventdate}", Colors.red),
                         ],
                       ),
                       Row(
                         children: [
-                          Mystyle()
-                              .showtitle4("​ម៉ោង:", Color(Myconstant().appbar)),
-                          Mystyle().showtitle4(
-                              "${display_list[index].eventtime}", Colors.red),
+                          Text(
+                            " ម៉ោង:",
+                            style: TextStyle(
+                                fontSize: widths * 0.04,
+                                color: Color(Myconstant().appbar),
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle()
+                          //     .showtitle3("​ម៉ោង:", Color(Myconstant().appbar)),
+                          Text(
+                            " ${listeventmodel[index].eventtime}",
+                            style: TextStyle(
+                                fontSize: widths * 0.03,
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Battambang'),
+                          ),
+                          // Mystyle().showtitle4(
+                          //     "${listeventmodel[index].eventtime}", Colors.red),
                         ],
                       ),
-                      Mystyle().showtitle4(
-                          "detail: ${display_list[index].eventdetail}",
-                          Colors.blue),
+
+                      Text(
+                        "detail: ${listeventmodel[index].eventdetail}",
+                        style: TextStyle(
+                            fontSize: widths * 0.025,
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Battambang'),
+                      ),
                     ],
                   ),
                 ),

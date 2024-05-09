@@ -122,70 +122,82 @@ class _GusetcustaddState extends State<Gusetcustadd> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(Myconstant().appbar),
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(
-            Icons.chevron_left,
-            color: Colors.white,
-            size: 45.0,
-          ),
-        ),
-        actions: [
-          Container(
-              margin: const EdgeInsets.only(right: 15.0),
-              child: IconButton(
-                onPressed: () async {
-                  if (listguest.isEmpty) {
-                    mydialog(context, "មិនមានចំនួនភ្ញៀវ...!");
-                  } else {
-                    final data = await Generatepdffile().generatrpdf(
-                        eventsmodel!, listguest, mytotaldollar, mytotalkh);
-                    Generatepdffile().savepdffile("Guest PDF", data);
-                  }
-                },
-                icon: const Icon(Icons.picture_as_pdf_rounded),
-                color: Colors.white,
-                iconSize: 40.0,
-              ))
-        ],
-        title: Mystyle().showtitle1("បញ្ចូលឈ្មោះភ្ញៀវ", Colors.white),
-      ),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(top: 115.0, bottom: 100.0),
-              child: Column(
-                children: [
-                  loadstatus ? Mystyle().showprogress() : showcontents(),
-                ],
-              ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(
+          const Duration(seconds: 1),
+        );
+        setState(() {
+          listguest.clear();
+          displaylist.clear();
+          getguestwhereidcus();
+        });
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(Myconstant().appbar),
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.chevron_left,
+              color: Colors.white,
+              size: 45.0,
             ),
           ),
-          listguest.isEmpty
-              ? const Text("")
-              : Column(
+          actions: [
+            Container(
+                margin: const EdgeInsets.only(right: 15.0),
+                child: IconButton(
+                  onPressed: () async {
+                    if (listguest.isEmpty) {
+                      mydialog(context, "មិនមានចំនួនភ្ញៀវ...!");
+                    } else {
+                      final data = await Generatepdffile().generatrpdf(
+                          eventsmodel!, listguest, mytotaldollar, mytotalkh);
+                      Generatepdffile().savepdffile("Guest PDF", data);
+                    }
+                  },
+                  icon: const Icon(Icons.picture_as_pdf_rounded),
+                  color: Colors.white,
+                  iconSize: 40.0,
+                ))
+          ],
+          title: Mystyle().showtitle1("បញ្ចូលឈ្មោះភ្ញៀវ", Colors.white),
+        ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.only(top: 115.0, bottom: 100.0),
+                child: Column(
                   children: [
-                    Card(
-                      margin: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [textfieldsearch()],
-                      ),
-                    ),
-                    Center(
-                      child: Card(
-                        margin: const EdgeInsets.only(top: 5.0),
-                        child: totalamont(),
-                      ),
-                    ),
+                    loadstatus ? Mystyle().showprogress() : showcontents(),
                   ],
                 ),
-          buttomaddguest(),
-        ],
+              ),
+            ),
+            listguest.isEmpty
+                ? const Text("")
+                : Column(
+                    children: [
+                      Card(
+                        margin: const EdgeInsets.only(top: 5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [textfieldsearch()],
+                        ),
+                      ),
+                      Center(
+                        child: Card(
+                          margin: const EdgeInsets.only(top: 5.0),
+                          child: totalamont(),
+                        ),
+                      ),
+                    ],
+                  ),
+            buttomaddguest(),
+          ],
+        ),
       ),
     );
   }
@@ -214,6 +226,7 @@ class _GusetcustaddState extends State<Gusetcustadd> {
                   Navigator.push(context, route).then(
                     (value) {
                       setState(() {
+                        status = true;
                         listguest.clear();
                         getguestwhereidcus();
                       });
