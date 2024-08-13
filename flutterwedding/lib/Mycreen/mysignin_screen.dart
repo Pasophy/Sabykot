@@ -52,7 +52,7 @@ class _MysigninState extends State<Mysignin> {
         ),
         child: Center(
           child: Container(
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: [
                   Colors.blue.shade50,
@@ -71,7 +71,8 @@ class _MysigninState extends State<Mysignin> {
                     const SizedBox(height: 30.0),
                     showmylogo(),
                     const SizedBox(height: 15.0),
-                    Mystyle().showtitle1("SABAY KOT", Color(Myconstant().appbar)),
+                    Mystyle()
+                        .showtitle1("SABAY KOT", Color(Myconstant().appbar)),
                     textfieldusername(),
                     textfieldpassword(),
                     const SizedBox(height: 15.0),
@@ -90,35 +91,38 @@ class _MysigninState extends State<Mysignin> {
   Widget buildsigninbuttom() {
     return FilledButton(
       style: ButtonStyle(
-          backgroundColor:
-              MaterialStatePropertyAll(Color(Myconstant().appbar)),
+          backgroundColor: MaterialStatePropertyAll(Color(Myconstant().appbar)),
           minimumSize: const MaterialStatePropertyAll(
             Size(200.0, 45.0),
           )),
       onPressed: () {
-        checkuserlogin();
+        setState(() {
+          checkuserlogin();
+        });
       },
       child: Mystyle().showtitle1("ចូលគណនី", Colors.white),
     );
   }
 
   Future<void> checkuserlogin() async {
-    String url =
-        "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$username";
     try {
-      Response response = await Dio().get(url);
-      var result = json.decode(response.data);
-      if (response.toString() == 'null') {
-        String url =
+      String url1 =
+          "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$username";
+      Response response1 = await Dio().get(url1);
+      print("============>$response1");
+      var result1 = jsonDecode(response1.data);
+      print("============>$result1");
+      if (response1.toString() == 'null') {
+        String url2 =
             "${Myconstant().domain}/projectsabaykot/getcustomerWhereUsercustomer.php?isAdd=true&usercustomer=$username";
         try {
-          Response response = await Dio().get(url);
-          var result = json.decode(response.data);
-          if (response.toString() == 'null') {
+          Response response2 = await Dio().get(url2);
+          var result2 = json.decode(response2.data);
+          if (response2.toString() == 'null') {
             // ignore: use_build_context_synchronously
             mydialog(context, 'No username ...!');
           } else {
-            for (var map in result) {
+            for (var map in result2) {
               customermodel = Customermodel.fromJson(map);
               if (password == customermodel!.password &&
                   username == customermodel!.usercustomer) {
@@ -134,7 +138,8 @@ class _MysigninState extends State<Mysignin> {
           mydialog(context, 'no internet');
         }
       } else {
-        for (var map in result) {
+        print("ok");
+        for (var map in result1) {
           usermodel = Usermodel.fromJson(map);
           if (password == usermodel!.password &&
               username == usermodel!.username) {
@@ -147,7 +152,7 @@ class _MysigninState extends State<Mysignin> {
       }
     } catch (e) {
       // ignore: use_build_context_synchronously
-      mydialog(context, 'no internet');
+      mydialog(context, 'no internet1');
     }
   }
 
