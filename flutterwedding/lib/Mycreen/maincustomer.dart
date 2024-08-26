@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterwedding/Myconstant/myconstant.dart';
 import 'package:flutterwedding/Mycreen/myhome_screen.dart';
+import 'package:flutterwedding/Mycreen/showguest_your_event.dart';
+import 'package:flutterwedding/Mycreen/showguest_yoursubadd.dart';
 import 'package:flutterwedding/Mymodel/customermodel.dart';
 import 'package:flutterwedding/Mymodel/eventmodel.dart';
 import 'package:flutterwedding/Mystyle/mystyle.dart';
@@ -94,7 +96,8 @@ class _MaincustomerState extends State<Maincustomer> {
               drawerheader(),
               const SizedBox(height: 15.0),
               menuevents(),
-              menugueste(),
+              menuaddguestevent(),
+              menueshowguste(),
             ],
           ),
           boildlogo(),
@@ -126,7 +129,30 @@ class _MaincustomerState extends State<Maincustomer> {
     );
   }
 
-  Widget menugueste() {
+  Widget menueshowguste() {
+    return ListTile(
+      leading: SizedBox(
+          height: 40.0,
+          width: 40.0,
+          child: CircleAvatar(
+            backgroundColor: Color(Myconstant().iconcolor),
+            child:
+                const Icon(Icons.diversity_1, size: 25.0, color: Colors.white),
+          )),
+      title: Mystyle()
+          .showtitle2("បង្ហាញឈ្មោះភ្ញៀវ", Color(Myconstant().iconcolor)),
+      hoverColor: Colors.red,
+      onTap: () {
+        MaterialPageRoute route = MaterialPageRoute(
+          builder: (context) => Showyourguest(idevent: idevent),
+        );
+        Navigator.pop(context);
+        Navigator.push(context, route);
+      },
+    );
+  }
+
+  Widget menuaddguestevent() {
     return ListTile(
       leading: SizedBox(
           height: 40.0,
@@ -134,20 +160,26 @@ class _MaincustomerState extends State<Maincustomer> {
           child: CircleAvatar(
             backgroundColor: Color(Myconstant().iconcolor),
             child: const Icon(
-              Icons.output,
+              Icons.edit_square,
               size: 25.0,
               color: Colors.white,
             ),
           )),
-      title: Mystyle()
-          .showtitle2(" ចាកចេញកម្មវិធី", Color(Myconstant().iconcolor)),
+      title:
+          Mystyle().showtitle2("កត់ត្រាចំណងដៃ", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
-        preferences!.clear();
         MaterialPageRoute route = MaterialPageRoute(
-          builder: (context) => const Myhomecreen(),
+          builder: (context) => Gusetcustadd(
+            idcustomer: idcustomer!,
+            ideven: idevent!,
+          ),
         );
-        Navigator.pushAndRemoveUntil(context, route, (route) => false);
+        Navigator.pop(context);
+        Navigator.push(context, route);
+        // Navigator.push(context,route).then((val) {
+        //   Navigator.pop(context);
+        // });
       },
     );
   }

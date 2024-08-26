@@ -109,9 +109,7 @@ class _MysigninState extends State<Mysignin> {
       String url1 =
           "${Myconstant().domain}/projectsabaykot/getadminWhereUseradmin.php?isAdd=true&username=$username";
       Response response1 = await Dio().get(url1);
-      print("============>$response1");
-      var result1 = jsonDecode(response1.data);
-      print("============>$result1");
+      var result1 = json.decode(response1.data);
       if (response1.toString() == 'null') {
         String url2 =
             "${Myconstant().domain}/projectsabaykot/getcustomerWhereUsercustomer.php?isAdd=true&usercustomer=$username";
@@ -138,7 +136,6 @@ class _MysigninState extends State<Mysignin> {
           mydialog(context, 'no internet');
         }
       } else {
-        print("ok");
         for (var map in result1) {
           usermodel = Usermodel.fromJson(map);
           if (password == usermodel!.password &&

@@ -76,6 +76,7 @@ class _CustomereventState extends State<Customerevent> {
     widths = MediaQuery.sizeOf(context).width;
     heights = MediaQuery.sizeOf(context).height;
     return Scaffold(
+
       body: Stack(
         children: [
           loadstatus
@@ -87,7 +88,7 @@ class _CustomereventState extends State<Customerevent> {
                     ],
                   ),
                 ),
-          showbuttombar(),
+          //showbuttombar(),
         ],
       ),
     );
@@ -122,12 +123,12 @@ class _CustomereventState extends State<Customerevent> {
                           Navigator.push(context, route);
                         },
                         icon: const Icon(
-                          Icons.group,
+                          Icons.output,
                           color: Colors.white,
                         ),
                         color: Color(Myconstant().appbar),
                       )),
-                  Mystyle().showtitle4("អ្នកប្រើ", Colors.red)
+                  Mystyle().showtitle4("ចាកចេញ", Colors.red)
                 ],
               ),
               Column(
@@ -234,7 +235,7 @@ class _CustomereventState extends State<Customerevent> {
               margin: EdgeInsets.only(left: widths * 0.2, top: 10.0),
               child: Row(
                 children: [
-                  Mystyle().showtitle1("ថ្ងៃទី:", Color(Myconstant().appbar)),
+                  Mystyle().showtitle1("ថ្ងៃទី:  ", Color(Myconstant().appbar)),
                   Mystyle()
                       .showtitle1("${listevents[index].eventdate}", Colors.red),
                 ],
@@ -244,15 +245,17 @@ class _CustomereventState extends State<Customerevent> {
               margin: EdgeInsets.only(left: widths * 0.2, top: 10.0),
               child: Row(
                 children: [
-                  Mystyle().showtitle1("​ម៉ោង:", Color(Myconstant().appbar)),
+                  Mystyle().showtitle1("​ម៉ោង:  ", Color(Myconstant().appbar)),
                   Mystyle()
                       .showtitle1("${listevents[index].eventtime}", Colors.red),
                 ],
               ),
             ),
             const SizedBox(height: 5.0),
+             Mystyle().showtitleevent(
+                "ព័ត៌មានលម្អិត:", Colors.blue),
             Mystyle().showtitle2(
-                "ព័ត៌មានលម្អិត: ${listevents[index].eventdetail}", Colors.blue),
+                "${listevents[index].eventdetail}", Colors.blue),
             const SizedBox(height: 30.0),
             const SizedBox(
               height: 25.0,

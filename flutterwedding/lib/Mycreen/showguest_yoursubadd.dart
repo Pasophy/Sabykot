@@ -421,9 +421,9 @@ class _GusetcustaddState extends State<Gusetcustadd> {
                     Mystyle().showtitle3(
                         "ចងដៃ: ${displaylist[index].paymenttype}",
                         Color(Myconstant().appbar)),
-                    Mystyle().showtitle3(
-                        "ស្ថានភាព: ${displaylist[index].status}",
-                        Color(Myconstant().appbar)),
+                    // Mystyle().showtitle3(
+                    //     "ស្ថានភាព: ${displaylist[index].status}",
+                    //     Color(Myconstant().appbar)),
                     Mystyle().showtitle3(
                         "អាស័យដ្ឋាន: ${displaylist[index].address}",
                         Color(Myconstant().appbar)),

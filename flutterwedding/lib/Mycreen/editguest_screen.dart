@@ -26,7 +26,7 @@ class _EditmyguestState extends State<Editmyguest> {
   String? idguest,
       currency,
       paymenttype,
-      paymentstatus,
+      paymentstatus="noactive",
       guestname,
       amount,
       address;
@@ -43,7 +43,7 @@ class _EditmyguestState extends State<Editmyguest> {
       index = widget.index;
       currency = listguest[index!].currency;
       paymenttype = listguest[index!].paymenttype;
-      paymentstatus = listguest[index!].status;
+      //paymentstatus = listguest[index!].status;
       idguest = listguest[index!].idguest;
      guestname= _namecontroller.text = listguest[index!].nameguest.toString();
      amount= _amountcontroller.text = listguest[index!].amount.toString();
@@ -90,7 +90,7 @@ class _EditmyguestState extends State<Editmyguest> {
                       const SizedBox(height: 15.0),
                       buildpaymenttype(),
                       const SizedBox(height: 15.0),
-                      buildpaymentstatus(),
+                      //buildpaymentstatus(),
                       const SizedBox(height: 15.0),
                       addressguest(),
                       const SizedBox(height: 20.0),

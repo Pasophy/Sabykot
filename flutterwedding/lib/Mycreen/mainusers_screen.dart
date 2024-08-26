@@ -26,7 +26,7 @@ class _MymainusersState extends State<Mymainusers> {
   SharedPreferences? preferences;
   Widget? currentwidget;
   late double widths, heights;
-  bool showseach = true;
+  bool showsearch = true;
   String? eventdate = "newevent";
 
   List<Widget> listwidget = [
@@ -82,7 +82,7 @@ class _MymainusersState extends State<Mymainusers> {
         backgroundColor: Color(Myconstant().appbar),
         leading: opendrawer(),
         actions: [
-          showseach
+          showsearch
               ? Container(
                   margin: const EdgeInsets.only(right: 20.0),
                   child: IconButton(
@@ -121,9 +121,10 @@ class _MymainusersState extends State<Mymainusers> {
             children: [
               drawerheader(),
               const SizedBox(height: 15.0),
-              menuevents(),
               menucustomer(),
-              menuwriteguest()
+              menuevents(),
+              menuwriteguest(),
+              
             ],
           ),
           boildlogo(),
@@ -148,7 +149,7 @@ class _MymainusersState extends State<Mymainusers> {
       onTap: () {
         setState(() {
           eventdate = "newevent";
-          showseach = true;
+          showsearch = true;
           index = 0;
           currentwidget = Myevents(usermodel: usermodel!);
         });
@@ -175,7 +176,7 @@ class _MymainusersState extends State<Mymainusers> {
       hoverColor: Colors.black54,
       onTap: () {
         setState(() {
-          showseach = false;
+          showsearch = false;
           index = 1;
           nameuser != null
               ? currentwidget = Mycustomer(
@@ -207,11 +208,11 @@ class _MymainusersState extends State<Mymainusers> {
             ),
           )),
       title: Mystyle()
-          .showtitle2(" កត់ត្រាភ្ញៀវ", Color(Myconstant().iconcolor)),
+          .showtitle2("  កត់ត្រាភ្ញៀវ", Color(Myconstant().iconcolor)),
       hoverColor: Colors.black54,
       onTap: () {
         setState(() {
-          showseach = false;
+          showsearch = false;
           index = 2;
           nameuser != null
               ? currentwidget = Mycustomer(

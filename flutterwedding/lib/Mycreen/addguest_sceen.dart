@@ -23,7 +23,7 @@ class _AddyourguestState extends State<Addyourguest> {
       idcustomers,
       currency,
       paymenttype,
-      paymentstatus,
+      paymentstatus="noactive",
       guestname,
       amount,
       address;
@@ -76,7 +76,7 @@ class _AddyourguestState extends State<Addyourguest> {
                   const SizedBox(height: 15.0),
                   buildpaymenttype(),
                   const SizedBox(height: 15.0),
-                  buildpaymentstatus(),
+                  //buildpaymentstatus(),
                   const SizedBox(height: 15.0),
                   addressguest(),
                   const SizedBox(height: 20.0),
@@ -486,8 +486,7 @@ class _AddyourguestState extends State<Addyourguest> {
             address == "") {
           mydialog(context, "សូមបញ្ចូលទិន្នន័យឱ្យគ្រប់...!");
         } else if (currency == null ||
-            amount == null ||
-            paymentstatus == null) {
+            amount == null) {
           mydialog(context, "សូមបំពេញព័ត៌មានឱ្យគ្រប់...!");
         } else {
           insertguests();
